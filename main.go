@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"wegou/config"
 	"wegou/wechat/message"
@@ -53,6 +54,7 @@ func main() {
 			//ctx.RawResponse(text)
 
 			image := message.Image(ctx, "TdE1etoQkYn8ySj3-5uy3W5gJUFzAK6DO3e0UUJAMUg")
+			fmt.Println(image)
 			ctx.RawResponse(image)
 		})
 		mux.EventHandleFunc("subscribe", func(ctx *core.Context) { // 设置具体类型的事件处理 Handler
