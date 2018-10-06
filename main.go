@@ -53,7 +53,7 @@ func main() {
 			//text := message.Text(ctx, "您输入了图片")
 			//ctx.RawResponse(text)
 
-			image := message.Image(ctx, "TdE1etoQkYn8ySj3-5uy3W5gJUFzAK6DO3e0UUJAMUg")
+			image := message.Image(ctx, "_c3Pe6DMtXU-zedUeoeuZgG_RuXQEgwAjIAfTyCzSd8")
 			fmt.Println(image)
 			ctx.RawResponse(image)
 		})
