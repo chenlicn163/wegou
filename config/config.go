@@ -9,14 +9,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-type Config struct {
-	OriId     string
-	AppId     string
-	Token     string
-	AppSecret string
-	AesKey    string
-}
-
 func init() {
 	appPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
@@ -41,14 +33,21 @@ func init() {
 	})
 }
 
-func GetDbConfig() Config {
-	conf := Config{
+func GetWechatConfig() Wechat {
+	conf := Wechat{
 		OriId:     viper.GetString("wechat.oriid"),
 		AppId:     viper.GetString("wechat.appId"),
 		Token:     viper.GetString("wechat.token"),
 		AppSecret: viper.GetString("wechat.appsecret"),
 		AesKey:    viper.GetString("wechat.aeskey"),
 	}
+	return conf
+}
 
+func GetWebConfig() Web {
+	conf := Web{
+		Host: viper.GetString("listen.host"),
+		Port: viper.GetString("listen.port"),
+	}
 	return conf
 }

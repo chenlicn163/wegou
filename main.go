@@ -17,7 +17,8 @@ const (
 )
 
 func main() {
-	config := config.GetDbConfig()
+	wechatConfig := config.GetWechatConfig()
+	webConfig := config.GetWebConfig()
 
 	mux := core.NewServeMux() // 创建 core.Handler, 也可以用自己实现的 core.Handler
 
@@ -48,8 +49,11 @@ func main() {
 		})
 		mux.MsgHandleFunc("image", func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			text := message.Text(ctx, "您输入了图片")
-			ctx.RawResponse(text)
+			//text := message.Text(ctx, "您输入了图片")
+			//ctx.RawResponse(text)
+
+			image := message.Image(ctx, "TdE1etoQkYn8ySj3-5uy3W5gJUFzAK6DO3e0UUJAMUg")
+			ctx.RawResponse(image)
 		})
 		mux.EventHandleFunc("subscribe", func(ctx *core.Context) { // 设置具体类型的事件处理 Handler
 			// TODO: 事件处理逻辑
@@ -61,12 +65,12 @@ func main() {
 	// 创建 Server, 设置正确的参数.
 	// 通常一个 Server 对应一个公众号, 当然一个 Server 也可以对应多个公众号, 这个时候 oriId 和 appId 都应该设置为空值!
 	//srv := core.NewServer("{oriId}", "{appId}", " {token}", "{base64AESKey}", mux, nil)
-	srv := core.NewServer(config.OriId, config.AppId, config.Token, config.AesKey, mux, nil)
+	srv := core.NewServer(wechatConfig.OriId, wechatConfig.AppId, wechatConfig.Token, wechatConfig.AesKey, mux, nil)
 
 	// 在回调 URL 的 Handler 里处理消息(事件)
 	http.HandleFunc("/wechat_callback", func(w http.ResponseWriter, r *http.Request) {
 		srv.ServeHTTP(w, r, nil)
 	})
-	http.HandleFunc("/material/list", server.Serve)
-	http.ListenAndServe(":80", nil)
+	http.HandleFunc("/material/info", server.MaterialServe)
+	http.ListenAndServe(webConfig.Host+":"+webConfig.Port, nil)
 }

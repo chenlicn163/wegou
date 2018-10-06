@@ -7,7 +7,7 @@ import (
 	"gopkg.in/chanxuehong/wechat.v2/mp/material"
 )
 
-func GetMaterialCount(clt *core.Client) {
+func GetMaterialCount(clt *core.Client) *material.MaterialCountInfo {
 
 	info, err := material.GetMaterialCount(clt)
 	if err != nil {
@@ -15,4 +15,14 @@ func GetMaterialCount(clt *core.Client) {
 	}
 	fmt.Println(info)
 
+	return info
+}
+
+func BatchGet(clt *core.Client) {
+	rslt, err := material.BatchGet(clt, "image", 0, 20)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(rslt)
 }
