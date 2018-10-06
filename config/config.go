@@ -46,7 +46,7 @@ func GetDbConfig() Config {
 		OriId:     viper.GetString("wechat.oriid"),
 		AppId:     viper.GetString("wechat.appId"),
 		Token:     viper.GetString("wechat.token"),
-		AppSecret: viper.GetString("wechat.appcecret"),
+		AppSecret: viper.GetString("wechat.appscecret"),
 		AesKey:    viper.GetString("wechat.aeskey"),
 	}
 
