@@ -18,16 +18,10 @@ func Text(ctx *core.Context, content string) response.Text {
 	return text
 }
 
-func Image(ctx *core.Context, mediaId string) response.Image {
-	image := response.Image{
-		MsgHeader: core.MsgHeader{
-			FromUserName: ctx.MixedMsg.MsgHeader.ToUserName,
-			ToUserName:   ctx.MixedMsg.MsgHeader.FromUserName,
-			CreateTime:   ctx.MixedMsg.MsgHeader.CreateTime,
-			MsgType:      response.MsgTypeImage,
-		},
-		//Image: struct{ MediaId string }{MediaId: mediaId},
-	}
+func Image(ctx *core.Context, mediaId string) *response.Image {
+
+	image := response.NewImage(ctx.MixedMsg.MsgHeader.FromUserName, ctx.MixedMsg.MsgHeader.ToUserName,
+		ctx.MixedMsg.MsgHeader.CreateTime, mediaId)
 	image.Image.MediaId = mediaId
 
 	return image
