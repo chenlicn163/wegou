@@ -2,17 +2,31 @@ package server
 
 import (
 	"fmt"
+	"log"
+	"net/http"
 	"strconv"
 	"wegou/wechat/model"
+	"wegou/wechat/utils"
+
+	"github.com/gorilla/mux"
+	"gopkg.in/chanxuehong/wechat.v2/mp/material"
 
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
-	"gopkg.in/chanxuehong/wechat.v2/mp/material"
 )
 
 const (
 	availableStatus = 1
 	addedStatus     = 2
 	deletedStatus   = 3
+
+	materialTemporary = 1
+	materialForever   = 2
+
+	materialTypeImage = "image"
+	materialTypice    = "voice"
+	materialTypeVideo = "video"
+	materialTypeThumb = "thumb"
+	materialTypeNews  = "news"
 )
 
 //获取永久素材数量
@@ -64,7 +78,14 @@ func SyncDelMaterial() {
 //---------------------------------------------------------------------------------------------
 
 //获取素材
-func GetMaterial(pageStr string, MaterialType string, sourceType string, statusStr string) []model.Material {
+func GetMaterial(r *http.Request) []model.Material {
+
+	query := r.URL.Query()
+	pageStr := query.Get("page")
+	MaterialType := query.Get("material")
+	sourceType := query.Get("source")
+	statusStr := query.Get("status")
+
 	page, _ := strconv.Atoi(pageStr)
 	status, _ := strconv.Atoi(statusStr)
 	mat := model.Material{}
@@ -74,25 +95,40 @@ func GetMaterial(pageStr string, MaterialType string, sourceType string, statusS
 }
 
 //添加素材
-func AddMaterial() {
+func AddMaterial(r *http.Request) bool {
 
+	fileName, err := utils.Upload(r, "upload")
+	if err != nil {
+		log.Println(err)
+	}
+
+	mat := model.Material{
+		Title:        "test-title",
+		Pic:          fileName,
+		Author:       "test-author",
+		Digest:       "test-digest",
+		Content:      "test-content",
+		ShowCoverPic: 0,
+		MaterialType: materialForever,
+		AccountId:    1,
+		Status:       addedStatus,
+		SourceType:   "image",
+	}
+	mat.AddMaterial()
+	return true
 }
 
 //删除素材
-func DelMaterial(idStr string, delFlag bool) bool {
+func DelMaterial(r *http.Request) bool {
+	idStr := mux.Vars(r)["id"]
 	id, _ := strconv.Atoi(idStr)
 	mat := model.Material{}
 	mat.Id = id
-	if !delFlag {
+	//标记为删除状态
+	mat.Status = deletedStatus
+	mat.UpdateMaterial()
 
-		//标记为删除状态
-		mat.Status = deletedStatus
-		mat.UpdateMaterial()
+	//触发任务，删除微信服务器
 
-		//触发任务，删除微信服务器
-
-		return true
-	} else {
-		return mat.DelMaterial()
-	}
+	return true
 }

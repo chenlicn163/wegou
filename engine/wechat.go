@@ -76,6 +76,8 @@ func Run() {
 	//素材管理
 	r.HandleFunc("/material", ListMaterialServe).Methods("get")
 	r.HandleFunc("/material/{id:[0-9]+}", DeleteMaterialServe).Methods("delete")
+	r.HandleFunc("/material", AddMaterialServe).Methods("post")
+	r.HandleFunc("/test", addFileServe).Methods("get")
 	http.Handle("/", r)
 
 	webConfig := GetWebConfig()

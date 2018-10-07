@@ -67,10 +67,8 @@ func (material *Material) GetMaterial(page int, MaterialType string, sourceType 
 
 //添加素材
 func (material *Material) AddMaterial() bool {
-	//1判断限制
-	//2上传素材到服务器，更新数据库
-	//3触发任务，定时处理，把数据更新到微信服务器
-
+	conn := database.Open()
+	conn.Model(&Material{}).Create(material)
 	return true
 }
 
