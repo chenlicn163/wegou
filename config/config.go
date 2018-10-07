@@ -32,22 +32,3 @@ func init() {
 		fmt.Println("Config file changed: " + e.Name)
 	})
 }
-
-func GetWechatConfig() Wechat {
-	conf := Wechat{
-		OriId:     viper.GetString("wechat.oriid"),
-		AppId:     viper.GetString("wechat.appId"),
-		Token:     viper.GetString("wechat.token"),
-		AppSecret: viper.GetString("wechat.appsecret"),
-		AesKey:    viper.GetString("wechat.aeskey"),
-	}
-	return conf
-}
-
-func GetWebConfig() Web {
-	conf := Web{
-		Host: viper.GetString("listen.host"),
-		Port: viper.GetString("listen.port"),
-	}
-	return conf
-}
