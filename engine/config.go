@@ -1,6 +1,8 @@
 package engine
 
-import "github.com/spf13/viper"
+import (
+	"github.com/spf13/viper"
+)
 
 //站点配置
 type Web struct {
@@ -15,6 +17,17 @@ type Wechat struct {
 	Token     string
 	AppSecret string
 	AesKey    string
+}
+
+type DataJson struct {
+	Code    string      `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+}
+
+type StatusJson struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
 }
 
 func GetWebConfig() Web {

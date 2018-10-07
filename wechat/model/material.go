@@ -24,8 +24,8 @@ type Material struct {
 	SourceType       string `json:"source_type"`
 }
 
-//从数据库中获取永久素材，数据库中不存在，提示稍后查看
-func (material *Material) GetMaterial(page int) []Material {
+//从数据库中获取素材
+func (material *Material) GetMaterial(page int, MaterialType string, sourceType string, status int) []Material {
 
 	pageSize := database.MaterialPageSize
 	offset := pageSize * (page - 1)
@@ -36,13 +36,36 @@ func (material *Material) GetMaterial(page int) []Material {
 	}
 
 	var materials []Material
-	conn.Model(&Material{}).Offset(offset).Limit(pageSize).Find(&materials)
+	materialConn := conn.Model(&Material{}).
+		Offset(offset).Limit(pageSize)
+
+	//素材类型 临时素材（1）、永久素材（2）
+	if MaterialType != "" {
+		materialConn = materialConn.Where("material_type = ?", MaterialType)
+	}
+
+	//资源类型
+	//图片（image）	2M，支持bmp/png/jpeg/jpg/gif格式
+	//语音（voice）	2M，播放长度不超过60s，mp3/wma/wav/amr格式
+	//视频（video）	10MB，支持MP4格式
+	//缩略图（thumb） 64KB，支持JPG格式
+	//图文（news）	当资源类型为图文时，素材类型只能是永久素材
+	if sourceType != "" {
+		materialConn = materialConn.Where("source_type = ?", sourceType)
+	}
+
+	//素材状态 正常状态（1）、添加状态（2）、删除状态（3）
+	if status != 0 {
+		materialConn = materialConn.Where("status = ?", status)
+	}
+
+	materialConn.Find(&materials)
 
 	return materials
 
 }
 
-//添加永久素材
+//添加素材
 func (material *Material) AddMaterial() bool {
 	//1判断限制
 	//2上传素材到服务器，更新数据库
@@ -51,9 +74,16 @@ func (material *Material) AddMaterial() bool {
 	return true
 }
 
-func (material *Material) DelMaterial() bool {
-	//1标记数据库需要删除
-	//2触发任务，定时处理，删除微信服务器数据
+//更新素材
+func (material *Material) UpdateMaterial() bool {
+	conn := database.Open()
+	conn.Model(&Material{}).Where("id=?", material.Id).Updates(material)
+	return true
+}
 
+//删除素材
+func (material *Material) DelMaterial() bool {
+	conn := database.Open()
+	conn.Model(&Material{}).Where("id=?", material.Id).Delete(Material{})
 	return true
 }

@@ -8,7 +8,7 @@ import (
 func main() {
 
 	//启动服务
-	//engine.Run()
+	engine.Run()
 
-	engine.Test()
+	//engine.Test()
 }
