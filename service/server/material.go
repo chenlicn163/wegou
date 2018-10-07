@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"wegou/wechat/model"
-	"wegou/wechat/utils"
+	"wegou/model"
+	"wegou/utils"
 
 	"github.com/gorilla/mux"
 	"gopkg.in/chanxuehong/wechat.v2/mp/material"

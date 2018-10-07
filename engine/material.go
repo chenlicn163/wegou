@@ -9,7 +9,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
-	"wegou/wechat/service/server"
+	"wegou/service/server"
 )
 
 //查询永久素材

@@ -2,7 +2,7 @@ package engine
 
 import (
 	"net/http"
-	"wegou/wechat/service/message"
+	"wegou/service/wechat/message"
 
 	ful "github.com/gorilla/mux"
 
