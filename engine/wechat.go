@@ -45,7 +45,7 @@ func Run() {
 			text := message.Text(ctx, "您输入了文本")
 			ctx.RawResponse(text)
 		})
-		mux.MsgHandleFunc(request.MsgTypeText, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
+		mux.MsgHandleFunc(request.MsgTypeVoice, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
 			//text := message.Text(ctx, "您输入了图片")
 			//ctx.RawResponse(text)
