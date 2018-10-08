@@ -29,6 +29,7 @@ const (
 	materialTypeVideo = "video"
 	materialTypeThumb = "thumb"
 	materialTypeNews  = "news"
+	materialPageSize  = 20
 )
 
 //获取永久素材数量
@@ -88,12 +89,45 @@ func GetMaterial(c *gin.Context) []model.Material {
 	statusStr := c.Query("status")
 	web := c.Param("web")
 
-	page, _ := strconv.Atoi(pageStr)
-	status, _ := strconv.Atoi(statusStr)
+	page, err := strconv.Atoi(pageStr)
+	if err != nil {
+		page = 1
+	}
+
+	status, err := strconv.Atoi(statusStr)
+	if err != nil {
+		status = 0
+	}
+
 	mat := model.Material{}
 	materials := mat.GetMaterial(web, page, MaterialType, sourceType, status)
 
 	return materials
+}
+
+//获取素材数量
+func GetMaterialCount(c *gin.Context) (int, int, int) {
+
+	MaterialType := c.Query("material")
+	sourceType := c.Query("source")
+	statusStr := c.Query("status")
+	web := c.Param("web")
+
+	status, _ := strconv.Atoi(statusStr)
+
+	mat := model.Material{}
+	count := mat.GetMaterialCount(web, MaterialType, sourceType, status)
+	pageSize := materialPageSize
+
+	var pageNum int
+	if count%pageSize == 0 {
+		pageNum = count / pageSize
+	} else {
+		pageNum = count/pageSize + 1
+	}
+
+	return count, pageSize, pageNum
+
 }
 
 //添加素材

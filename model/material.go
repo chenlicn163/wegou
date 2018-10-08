@@ -63,7 +63,42 @@ func (material *Material) GetMaterial(web string, page int, MaterialType string,
 	materialConn.Find(&materials)
 
 	return materials
+}
 
+func (material *Material) GetMaterialCount(web string, MaterialType string, sourceType string, status int) int {
+
+	conn := database.Open(web)
+	defer conn.Close()
+	if conn == nil {
+		return 0
+	}
+
+	materialConn := conn.Model(&Material{})
+
+	//素材类型 临时素材（1）、永久素材（2）
+	if MaterialType != "" {
+		materialConn = materialConn.Where("material_type = ?", MaterialType)
+	}
+
+	//资源类型
+	//图片（image）	2M，支持bmp/png/jpeg/jpg/gif格式
+	//语音（voice）	2M，播放长度不超过60s，mp3/wma/wav/amr格式
+	//视频（video）	10MB，支持MP4格式
+	//缩略图（thumb） 64KB，支持JPG格式
+	//图文（news）	当资源类型为图文时，素材类型只能是永久素材
+	if sourceType != "" {
+		materialConn = materialConn.Where("source_type = ?", sourceType)
+	}
+
+	//素材状态 正常状态（1）、添加状态（2）、删除状态（3）
+	if status != 0 {
+		materialConn = materialConn.Where("status = ?", status)
+	}
+
+	var count int
+	materialConn.Count(&count)
+
+	return count
 }
 
 //添加素材

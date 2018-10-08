@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"os"
 	"path"
-	"path/filepath"
 )
 
 func Upload(r *http.Request, UploadPath string) (string, error) {
@@ -35,11 +34,7 @@ func Upload(r *http.Request, UploadPath string) (string, error) {
 		return "", err
 	}
 
-	appPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	if err != nil {
-		panic(err)
-	}
-	fileName = appPath + "/" + fullFileName
+	fileName = "/" + fullFileName
 	return fileName, nil
 }
 

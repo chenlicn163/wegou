@@ -17,11 +17,19 @@ import (
 func ListMaterialServe(c *gin.Context) {
 
 	materials := server.GetMaterial(c)
+	count, pageSize, pageNum := server.GetMaterialCount(c)
 
 	c.JSON(http.StatusOK, gin.H{
 		"code":    "0",
 		"message": "success",
-		"data":    materials,
+		"data": map[string]interface{}{
+			"materials": materials,
+			"page": map[string]int{
+				"count":     count,
+				"page_size": pageSize,
+				"page_num":  pageNum,
+			},
+		},
 	})
 
 	/*c.Writer.Header().Set("Content-Type", "application/json")
