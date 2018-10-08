@@ -46,7 +46,7 @@ func FetchMaterialCount(clt *core.Client) *material.MaterialCountInfo {
 
 //批量获取永久素材
 func BatchFetchMaterial(clt *core.Client, materialType string, pageStr string) *material.BatchGetResult {
-	size := 20
+	size := materialPageSize
 	page, err := strconv.Atoi(pageStr)
 	if err != nil {
 		page = 1
