@@ -1,11 +1,9 @@
 package engine
 
 import (
-	"net/http"
 	"wegou/service/wechat/message"
 
-	ful "github.com/gorilla/mux"
-
+	"github.com/gin-gonic/gin"
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/request"
 )
@@ -67,8 +65,19 @@ func Run() {
 	// 通常一个 Server 对应一个公众号, 当然一个 Server 也可以对应多个公众号, 这个时候 oriId 和 appId 都应该设置为空值!
 	//srv := core.NewServer("{oriId}", "{appId}", " {token}", "{base64AESKey}", mux, nil)
 	srv := core.NewServer(wechatConfig.OriId, wechatConfig.AppId, wechatConfig.Token, wechatConfig.AesKey, mux, nil)
+	r := gin.Default()
+	r.GET("/wechat_callback", func(c *gin.Context) {
+		srv.ServeHTTP(c.Writer, c.Request, nil)
+	})
+	r.GET("/material", ListMaterialServe)
+	r.DELETE("/material/:id", DeleteMaterialServe)
+	r.PUT("/material", AddMaterialServe)
+	r.GET("/test", addFileServe)
 
-	r := ful.NewRouter()
+	webConfig := GetWebConfig()
+	addr := webConfig.Host + ":" + webConfig.Port
+	r.Run(addr)
+	/*r := ful.NewRouter()
 	// 在回调 URL 的 Handler 里处理消息(事件)
 	r.HandleFunc("/wechat_callback", func(w http.ResponseWriter, r *http.Request) {
 		srv.ServeHTTP(w, r, nil)
@@ -82,7 +91,7 @@ func Run() {
 
 	webConfig := GetWebConfig()
 	addr := webConfig.Host + ":" + webConfig.Port
-	http.ListenAndServe(addr, nil)
+	http.ListenAndServe(addr, nil)*/
 }
 
 func Test() {

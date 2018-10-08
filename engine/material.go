@@ -2,7 +2,6 @@ package engine
 
 import (
 	"bytes"
-	"encoding/json"
 	"io"
 	"io/ioutil"
 	"log"
@@ -10,22 +9,23 @@ import (
 	"net/http"
 	"os"
 	"wegou/service/server"
+
+	"github.com/gin-gonic/gin"
 )
 
 //查询永久素材
-func ListMaterialServe(w http.ResponseWriter, r *http.Request) {
+func ListMaterialServe(c *gin.Context) {
 
-	materials := server.GetMaterial(r)
-	DataJson := DataJson{
-		Code:    "0",
-		Message: "success",
-		Data:    materials,
-	}
+	materials := server.GetMaterial(c)
 
-	jsonStr, _ := json.Marshal(DataJson)
+	c.JSON(http.StatusOK, gin.H{
+		"code":    "0",
+		"message": "success",
+		"data":    materials,
+	})
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(jsonStr)
+	/*c.Writer.Header().Set("Content-Type", "application/json")
+	c.Writer.Write(jsonStr)*/
 
 	/*wechatConfig := GetWechatConfig()
 	srv := core.NewDefaultAccessTokenServer(wechatConfig.AppId, wechatConfig.AppSecret, nil)
@@ -42,9 +42,9 @@ func ListMaterialServe(w http.ResponseWriter, r *http.Request) {
 }
 
 //删除永久素材
-func DeleteMaterialServe(w http.ResponseWriter, r *http.Request) {
+func DeleteMaterialServe(c *gin.Context) {
 
-	flag := server.DelMaterial(r)
+	flag := server.DelMaterial(c)
 
 	StatusJson := StatusJson{}
 	if !flag {
@@ -55,16 +55,16 @@ func DeleteMaterialServe(w http.ResponseWriter, r *http.Request) {
 		StatusJson.Message = "success"
 	}
 
-	jsonStr, _ := json.Marshal(StatusJson)
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(jsonStr))
+	c.JSON(http.StatusOK, gin.H{
+		"code":    StatusJson.Code,
+		"message": StatusJson.Message,
+	})
 }
 
 //添加永久素材
-func AddMaterialServe(w http.ResponseWriter, r *http.Request) {
+func AddMaterialServe(c *gin.Context) {
 
-	flag := server.AddMaterial(r)
+	flag := server.AddMaterial(c)
 
 	StatusJson := StatusJson{}
 	if !flag {
@@ -75,14 +75,14 @@ func AddMaterialServe(w http.ResponseWriter, r *http.Request) {
 		StatusJson.Message = "success"
 	}
 
-	jsonStr, _ := json.Marshal(StatusJson)
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(jsonStr))
+	c.JSON(http.StatusOK, gin.H{
+		"code":    StatusJson.Code,
+		"message": StatusJson.Message,
+	})
 }
 
 //test 上传文件测试
-func addFileServe(w http.ResponseWriter, r *http.Request) {
+func addFileServe(c *gin.Context) {
 	buf := new(bytes.Buffer)
 	writer := multipart.NewWriter(buf)
 	formFile, err := writer.CreateFormFile("file", "test.jpg")
@@ -99,15 +99,36 @@ func addFileServe(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf("Write to form file failed: %s\n", err)
 	}
+	writer.WriteField("title", "test-title-wechat")
+	writer.WriteField("author", "test-author-wechat")
+	writer.WriteField("digest", "test-digest-wechat")
+	writer.WriteField("content", "test-content-wechat")
+	writer.WriteField("show_cover_pic", "0")
+	writer.WriteField("material_type", "1")
+	writer.WriteField("account_id", "0")
+	writer.WriteField("status", "2")
+	writer.WriteField("source_type", "voice")
 
 	contentType := writer.FormDataContentType()
-	writer.Close()
-	resp, err := http.Post("http://127.0.0.1:8090/material", contentType, buf)
 
+	writer.Close()
+
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodPut, "http://127.0.0.1:8090/material", buf)
 	if err != nil {
-		log.Fatalf("Post failed: %s\n", err)
+		log.Fatalf("New request failed: %s\n", err)
 	}
+	req.Header.Set("Content-Type", contentType)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalf("Put failed: %s\n", err)
+	}
+
 	body, err := ioutil.ReadAll(resp.Body)
-	w.Write(body)
+	if err != nil {
+		log.Fatalf("Read failed: %s\n", err)
+	}
+	c.Writer.Write(body)
 
 }

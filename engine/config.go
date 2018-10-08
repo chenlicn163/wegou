@@ -19,12 +19,6 @@ type Wechat struct {
 	AesKey    string
 }
 
-type DataJson struct {
-	Code    string      `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
-}
-
 type StatusJson struct {
 	Code    string `json:"code"`
 	Message string `json:"message"`

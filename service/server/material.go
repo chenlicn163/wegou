@@ -3,12 +3,11 @@ package server
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"strconv"
 	"wegou/model"
 	"wegou/utils"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"gopkg.in/chanxuehong/wechat.v2/mp/material"
 
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
@@ -21,6 +20,9 @@ const (
 
 	materialTemporary = 1
 	materialForever   = 2
+
+	hideCoverPic = 0
+	showCoverPic = 1
 
 	materialTypeImage = "image"
 	materialTypice    = "voice"
@@ -78,13 +80,12 @@ func SyncDelMaterial() {
 //---------------------------------------------------------------------------------------------
 
 //获取素材
-func GetMaterial(r *http.Request) []model.Material {
+func GetMaterial(c *gin.Context) []model.Material {
 
-	query := r.URL.Query()
-	pageStr := query.Get("page")
-	MaterialType := query.Get("material")
-	sourceType := query.Get("source")
-	statusStr := query.Get("status")
+	pageStr := c.Query("page")
+	MaterialType := c.Query("material")
+	sourceType := c.Query("source")
+	statusStr := c.Query("status")
 
 	page, _ := strconv.Atoi(pageStr)
 	status, _ := strconv.Atoi(statusStr)
@@ -95,32 +96,51 @@ func GetMaterial(r *http.Request) []model.Material {
 }
 
 //添加素材
-func AddMaterial(r *http.Request) bool {
+func AddMaterial(c *gin.Context) bool {
 
-	fileName, err := utils.Upload(r, "upload")
+	fileName, err := utils.Upload(c.Request, "upload")
 	if err != nil {
 		log.Println(err)
 	}
 
+	showCoverPic, err := strconv.Atoi(c.PostForm("show_cover_pic"))
+	if err != nil {
+		showCoverPic = hideCoverPic
+	}
+
+	materialType, err := strconv.Atoi(c.PostForm("material_type"))
+	if err != nil {
+		materialType = materialTemporary
+	}
+
+	accountId, err := strconv.Atoi(c.PostForm("account_id"))
+	if err != nil {
+		return false
+	}
+
+	sourceType := c.PostForm("source_type")
+	if sourceType == "" {
+		return false
+	}
 	mat := model.Material{
-		Title:        "test-title",
+		Title:        c.PostForm("title"),
 		Pic:          fileName,
-		Author:       "test-author",
-		Digest:       "test-digest",
-		Content:      "test-content",
-		ShowCoverPic: 0,
-		MaterialType: materialForever,
-		AccountId:    1,
+		Author:       c.PostForm("author"),
+		Digest:       c.PostForm("digest"),
+		Content:      c.PostForm("content"),
+		ShowCoverPic: showCoverPic,
+		MaterialType: materialType,
+		AccountId:    accountId,
 		Status:       addedStatus,
-		SourceType:   "image",
+		SourceType:   sourceType,
 	}
 	mat.AddMaterial()
 	return true
 }
 
 //删除素材
-func DelMaterial(r *http.Request) bool {
-	idStr := mux.Vars(r)["id"]
+func DelMaterial(c *gin.Context) bool {
+	idStr := c.Param("id")
 	id, _ := strconv.Atoi(idStr)
 	mat := model.Material{}
 	mat.Id = id
