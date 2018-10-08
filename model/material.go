@@ -25,12 +25,13 @@ type Material struct {
 }
 
 //从数据库中获取素材
-func (material *Material) GetMaterial(page int, MaterialType string, sourceType string, status int) []Material {
+func (material *Material) GetMaterial(web string, page int, MaterialType string, sourceType string, status int) []Material {
 
 	pageSize := database.MaterialPageSize
 	offset := pageSize * (page - 1)
 
-	conn := database.Open()
+	conn := database.Open(web)
+	defer conn.Close()
 	if conn == nil {
 		return nil
 	}
@@ -66,22 +67,25 @@ func (material *Material) GetMaterial(page int, MaterialType string, sourceType 
 }
 
 //添加素材
-func (material *Material) AddMaterial() bool {
-	conn := database.Open()
+func (material *Material) AddMaterial(web string) bool {
+	conn := database.Open(web)
+	defer conn.Close()
 	conn.Model(&Material{}).Create(material)
 	return true
 }
 
 //更新素材
-func (material *Material) UpdateMaterial() bool {
-	conn := database.Open()
+func (material *Material) UpdateMaterial(web string) bool {
+	conn := database.Open(web)
+	defer conn.Close()
 	conn.Model(&Material{}).Where("id=?", material.Id).Updates(material)
 	return true
 }
 
 //删除素材
-func (material *Material) DelMaterial() bool {
-	conn := database.Open()
+func (material *Material) DelMaterial(web string) bool {
+	conn := database.Open(web)
+	defer conn.Close()
 	conn.Model(&Material{}).Where("id=?", material.Id).Delete(Material{})
 	return true
 }

@@ -19,11 +19,6 @@ type Wechat struct {
 	AesKey    string
 }
 
-type StatusJson struct {
-	Code    string `json:"code"`
-	Message string `json:"message"`
-}
-
 func GetWebConfig() Web {
 	conf := Web{
 		Host: viper.GetString("listen.host"),

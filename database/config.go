@@ -1,6 +1,10 @@
 package database
 
-import "github.com/spf13/viper"
+import (
+	"log"
+
+	"github.com/spf13/viper"
+)
 
 const (
 	MaterialPageSize = 20
@@ -15,13 +19,15 @@ type Db struct {
 	DbName   string
 }
 
-func GetDbConfig() Db {
+func GetDbConfig(account string) Db {
+	dbConfig := viper.GetString("account." + account)
+	log.Println(dbConfig)
 	conf := Db{
-		Host:     viper.GetString("database.host"),
-		Port:     viper.GetString("database.port"),
-		User:     viper.GetString("database.user"),
-		Password: viper.GetString("database.password"),
-		DbName:   viper.GetString("database.db_name"),
+		Host:     viper.GetString(dbConfig + ".host"),
+		Port:     viper.GetString(dbConfig + ".port"),
+		User:     viper.GetString(dbConfig + ".user"),
+		Password: viper.GetString(dbConfig + ".password"),
+		DbName:   viper.GetString(dbConfig + ".db_name"),
 	}
 
 	return conf

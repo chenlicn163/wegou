@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"wegou/engine/admin"
 	"wegou/service/wechat/message"
 
 	"github.com/gin-gonic/gin"
@@ -69,29 +70,16 @@ func Run() {
 	r.GET("/wechat_callback", func(c *gin.Context) {
 		srv.ServeHTTP(c.Writer, c.Request, nil)
 	})
-	r.GET("/material", ListMaterialServe)
-	r.DELETE("/material/:id", DeleteMaterialServe)
-	r.PUT("/material", AddMaterialServe)
-	r.GET("/test", addFileServe)
+
+	management := r.Group("/admin")
+	management.GET("/material/:web", admin.ListMaterialServe)
+	management.DELETE("/material/:web/:id", admin.DeleteMaterialServe)
+	management.PUT("/material/:web", admin.AddMaterialServe)
+	management.GET("/test", admin.AddFileServe)
 
 	webConfig := GetWebConfig()
 	addr := webConfig.Host + ":" + webConfig.Port
 	r.Run(addr)
-	/*r := ful.NewRouter()
-	// 在回调 URL 的 Handler 里处理消息(事件)
-	r.HandleFunc("/wechat_callback", func(w http.ResponseWriter, r *http.Request) {
-		srv.ServeHTTP(w, r, nil)
-	})
-	//素材管理
-	r.HandleFunc("/material", ListMaterialServe).Methods("get")
-	r.HandleFunc("/material/{id:[0-9]+}", DeleteMaterialServe).Methods("delete")
-	r.HandleFunc("/material", AddMaterialServe).Methods("post")
-	r.HandleFunc("/test", addFileServe).Methods("get")
-	http.Handle("/", r)
-
-	webConfig := GetWebConfig()
-	addr := webConfig.Host + ":" + webConfig.Port
-	http.ListenAndServe(addr, nil)*/
 }
 
 func Test() {

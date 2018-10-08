@@ -86,11 +86,12 @@ func GetMaterial(c *gin.Context) []model.Material {
 	MaterialType := c.Query("material")
 	sourceType := c.Query("source")
 	statusStr := c.Query("status")
+	web := c.Param("web")
 
 	page, _ := strconv.Atoi(pageStr)
 	status, _ := strconv.Atoi(statusStr)
 	mat := model.Material{}
-	materials := mat.GetMaterial(page, MaterialType, sourceType, status)
+	materials := mat.GetMaterial(web, page, MaterialType, sourceType, status)
 
 	return materials
 }
@@ -134,7 +135,9 @@ func AddMaterial(c *gin.Context) bool {
 		Status:       addedStatus,
 		SourceType:   sourceType,
 	}
-	mat.AddMaterial()
+
+	web := c.Param("web")
+	mat.AddMaterial(web)
 	return true
 }
 
@@ -146,7 +149,8 @@ func DelMaterial(c *gin.Context) bool {
 	mat.Id = id
 	//标记为删除状态
 	mat.Status = deletedStatus
-	mat.UpdateMaterial()
+	web := c.Param("web")
+	mat.UpdateMaterial(web)
 
 	//触发任务，删除微信服务器
 

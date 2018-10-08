@@ -1,4 +1,4 @@
-package engine
+package admin
 
 import (
 	"bytes"
@@ -82,7 +82,7 @@ func AddMaterialServe(c *gin.Context) {
 }
 
 //test 上传文件测试
-func addFileServe(c *gin.Context) {
+func AddFileServe(c *gin.Context) {
 	buf := new(bytes.Buffer)
 	writer := multipart.NewWriter(buf)
 	formFile, err := writer.CreateFormFile("file", "test.jpg")
