@@ -48,10 +48,10 @@ func DeleteMaterialServe(c *gin.Context) {
 
 	StatusJson := StatusJson{}
 	if !flag {
-		StatusJson.Code = "20001"
-		StatusJson.Message = "删除失败"
+		StatusJson.Code = MaterialDelFailedCode
+		StatusJson.Message = MaterialDelFailedMsg
 	} else {
-		StatusJson.Code = "0"
+		StatusJson.Code = WechatSuccessCode
 		StatusJson.Message = "success"
 	}
 
@@ -64,14 +64,14 @@ func DeleteMaterialServe(c *gin.Context) {
 //添加永久素材
 func AddMaterialServe(c *gin.Context) {
 
-	flag := server.AddMaterial(c)
+	_, err := server.AddMaterial(c)
 
 	StatusJson := StatusJson{}
-	if !flag {
-		StatusJson.Code = "20002"
-		StatusJson.Message = "新增永久图片素材失败"
+	if err != nil {
+		StatusJson.Code = MaterialAddFailedCode
+		StatusJson.Message = MaterialAddFailedMsg + ",error:" + err.Error()
 	} else {
-		StatusJson.Code = "0"
+		StatusJson.Code = WechatSuccessCode
 		StatusJson.Message = "success"
 	}
 
@@ -99,22 +99,21 @@ func AddFileServe(c *gin.Context) {
 	if err != nil {
 		log.Fatalf("Write to form file failed: %s\n", err)
 	}
-	writer.WriteField("title", "test-title-wechat")
-	writer.WriteField("author", "test-author-wechat")
-	writer.WriteField("digest", "test-digest-wechat")
-	writer.WriteField("content", "test-content-wechat")
-	writer.WriteField("show_cover_pic", "0")
-	writer.WriteField("material_type", "1")
-	writer.WriteField("account_id", "0")
-	writer.WriteField("status", "2")
-	writer.WriteField("source_type", "voice")
+	writer.WriteField("title", c.PostForm("title"))
+	writer.WriteField("author", c.PostForm("author"))
+	writer.WriteField("digest", c.PostForm("digest"))
+	writer.WriteField("content", c.PostForm("content"))
+	writer.WriteField("show_cover_pic", c.PostForm("show_cover_pic"))
+	writer.WriteField("material_type", c.PostForm("material_type"))
+	writer.WriteField("account_id", c.PostForm("account_id"))
+	writer.WriteField("source_type", c.PostForm("source_type"))
 
 	contentType := writer.FormDataContentType()
 
 	writer.Close()
 
 	client := &http.Client{}
-	req, err := http.NewRequest(http.MethodPut, "http://127.0.0.1:8090/material", buf)
+	req, err := http.NewRequest(http.MethodPut, "http://127.0.0.1:8090/admin/material/test1", buf)
 	if err != nil {
 		log.Fatalf("New request failed: %s\n", err)
 	}

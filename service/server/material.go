@@ -1,8 +1,8 @@
 package server
 
 import (
+	"errors"
 	"fmt"
-	"log"
 	"strconv"
 	"wegou/model"
 	"wegou/utils"
@@ -97,11 +97,11 @@ func GetMaterial(c *gin.Context) []model.Material {
 }
 
 //添加素材
-func AddMaterial(c *gin.Context) bool {
+func AddMaterial(c *gin.Context) (bool, error) {
 
 	fileName, err := utils.Upload(c.Request, "upload")
 	if err != nil {
-		log.Println(err)
+		return false, errors.New("field upload :" + err.Error())
 	}
 
 	showCoverPic, err := strconv.Atoi(c.PostForm("show_cover_pic"))
@@ -116,12 +116,12 @@ func AddMaterial(c *gin.Context) bool {
 
 	accountId, err := strconv.Atoi(c.PostForm("account_id"))
 	if err != nil {
-		return false
+		return false, errors.New("field account_id :" + err.Error())
 	}
 
 	sourceType := c.PostForm("source_type")
 	if sourceType == "" {
-		return false
+		return false, err
 	}
 	mat := model.Material{
 		Title:        c.PostForm("title"),
@@ -138,7 +138,7 @@ func AddMaterial(c *gin.Context) bool {
 
 	web := c.Param("web")
 	mat.AddMaterial(web)
-	return true
+	return true, nil
 }
 
 //删除素材
