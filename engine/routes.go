@@ -10,7 +10,9 @@ func Routes() *gin.Engine {
 	srv := WechatServe()
 	r := gin.Default()
 	r.Any("/wechat_callback/:web", func(c *gin.Context) {
-		srv.ServeHTTP(c.Writer, c.Request, map[string][]string{"web": []string{c.Param("web")}})
+		query := c.Request.URL.Query()
+		query.Add("web", c.Param("web"))
+		srv.ServeHTTP(c.Writer, c.Request, query)
 	})
 	management := r.Group("/admin")
 	//素材管理
