@@ -22,6 +22,10 @@ type Material struct {
 	AccountId        int    `json:"account_id"`
 	Status           int    `json:"status"`
 	SourceType       string `json:"source_type"`
+	CreatedAt        int64  `json:"created_at"`
+	UpdatedAt        int64  `json:"updated_at"`
+	WxCreatedAt      int64  `json:"wx_created_at"`
+	WxUpdatedAt      int64  `json:"wx_upadated_at"`
 }
 
 //从数据库中获取素材

@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"time"
+	"wegou/database"
 	"wegou/model"
 	"wegou/utils"
 
@@ -14,22 +16,21 @@ import (
 )
 
 const (
-	availableStatus = 1
-	addedStatus     = 2
-	deletedStatus   = 3
+	availableStatus = 1 //可用
+	addedStatus     = 2 //添加中
+	deletedStatus   = 3 //删除中
 
-	materialTemporary = 1
-	materialForever   = 2
+	materialTemporary = 1 //临时
+	materialForever   = 2 //永久
 
-	hideCoverPic = 0
-	showCoverPic = 1
+	hideCoverPic = 0 //不显示图
+	showCoverPic = 1 //显示图
 
 	materialTypeImage = "image"
 	materialTypice    = "voice"
 	materialTypeVideo = "video"
 	materialTypeThumb = "thumb"
 	materialTypeNews  = "news"
-	materialPageSize  = 20
 )
 
 //获取永久素材数量
@@ -46,7 +47,7 @@ func FetchMaterialCount(clt *core.Client) *material.MaterialCountInfo {
 
 //批量获取永久素材
 func BatchFetchMaterial(clt *core.Client, materialType string, pageStr string) *material.BatchGetResult {
-	size := materialPageSize
+	size := database.MaterialPageSize
 	page, err := strconv.Atoi(pageStr)
 	if err != nil {
 		page = 1
@@ -117,7 +118,7 @@ func GetMaterialCount(c *gin.Context) (int, int, int) {
 
 	mat := model.Material{}
 	count := mat.GetMaterialCount(web, MaterialType, sourceType, status)
-	pageSize := materialPageSize
+	pageSize := database.MaterialPageSize
 
 	var pageNum int
 	if count%pageSize == 0 {
@@ -157,6 +158,7 @@ func AddMaterial(c *gin.Context) (bool, error) {
 	if sourceType == "" {
 		return false, err
 	}
+	createdAt := time.Now().Unix()
 	mat := model.Material{
 		Title:        c.PostForm("title"),
 		Pic:          fileName,
@@ -168,6 +170,8 @@ func AddMaterial(c *gin.Context) (bool, error) {
 		AccountId:    accountId,
 		Status:       addedStatus,
 		SourceType:   sourceType,
+		CreatedAt:    createdAt,
+		UpdatedAt:    createdAt,
 	}
 
 	web := c.Param("web")

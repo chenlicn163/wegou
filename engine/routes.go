@@ -13,9 +13,14 @@ func Routes() *gin.Engine {
 		srv.ServeHTTP(c.Writer, c.Request, nil)
 	})
 	management := r.Group("/admin")
+	//素材管理
 	management.GET("/material/:web", admin.ListMaterialServe)
 	management.DELETE("/material/:web/:id", admin.DeleteMaterialServe)
 	management.PUT("/material/:web", admin.AddMaterialServe)
+	//粉丝管理
+	management.GET("/fan/:web", admin.ListFansServe)
+
+	//前台
 
 	r.POST("/test", admin.AddFileServe)
 

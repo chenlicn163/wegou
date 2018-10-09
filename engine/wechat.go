@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"wegou/service/server"
 	"wegou/service/wechat/message"
 
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
@@ -53,6 +54,7 @@ func WechatServe() *core.Server {
 			// TODO: 事件处理逻辑
 			text := message.Text(ctx, "欢迎关注")
 			ctx.RawResponse(text)
+			server.AddFan("test1", 1, ctx.MixedMsg.MsgHeader.FromUserName)
 		})
 	}
 

@@ -8,6 +8,7 @@ import (
 
 const (
 	MaterialPageSize = 20
+	FanPageSize      = 20
 )
 
 //数据库配置

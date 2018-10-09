@@ -9,8 +9,8 @@ import (
 
 //查询粉丝
 func ListFansServe(c *gin.Context) {
-	fans := server.GetFans(c)
-	count, pageSize, pageNum := server.GetFansCount(c)
+	fans := server.GetFan(c)
+	count, pageSize, pageNum := server.GetFanCount(c)
 
 	c.JSON(http.StatusOK, gin.H{
 		"code":    "0",

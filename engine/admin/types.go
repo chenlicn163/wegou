@@ -6,6 +6,8 @@ const (
 	MaterialDelFailedMsg  = "删除永久素材失败"
 	MaterialAddFailedCode = "20002"
 	MaterialAddFailedMsg  = "新增加永久素材失败"
+	FanAddFailedCode      = "20101"
+	FanAddFailedMsg       = "粉丝添加失败"
 )
 
 type StatusJson struct {
