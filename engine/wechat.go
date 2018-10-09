@@ -4,7 +4,8 @@ import (
 	"wegou/service/server"
 	"wegou/service/wechat/message"
 
-	"github.com/uber/tchannel-go/crossdock/log"
+	"log"
+
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/request"
 )
@@ -39,7 +40,7 @@ func WechatServe() *core.Server {
 		mux.MsgHandleFunc(request.MsgTypeText, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
 			values := ctx.QueryParams
-			log.Println(values["web"][0])
+			log.Println(values)
 			message.Text(ctx, "您输入了文本")
 		})
 		mux.MsgHandleFunc(request.MsgTypeVoice, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
