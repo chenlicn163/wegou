@@ -4,6 +4,7 @@ import (
 	"wegou/service/server"
 	"wegou/service/wechat/message"
 
+	"github.com/uber/tchannel-go/crossdock/log"
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/request"
 )
@@ -32,30 +33,23 @@ func WechatServe() *core.Server {
 
 		mux.MsgHandleFunc(request.MsgTypeVoice, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			text := message.Text(ctx, "您输入声音")
-			ctx.RawResponse(text)
+			message.Text(ctx, "您输入声音")
 		})
 
 		mux.MsgHandleFunc(request.MsgTypeText, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			text := message.Text(ctx, "您输入了文本")
-			ctx.RawResponse(text)
+			values := ctx.QueryParams
+			log.Println(values["web"][0])
+			message.Text(ctx, "您输入了文本")
 		})
 		mux.MsgHandleFunc(request.MsgTypeVoice, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			//text := message.Text(ctx, "您输入了图片")
-			//ctx.RawResponse(text)
-
-			image := message.Image(ctx, "_c3Pe6DMtXU-zedUeoeuZgG_RuXQEgwAjIAfTyCzSd8")
-			//fmt.Println(image)
-			ctx.RawResponse(image)
+			message.Image(ctx, "_c3Pe6DMtXU-zedUeoeuZgG_RuXQEgwAjIAfTyCzSd8")
 		})
 		mux.EventHandleFunc(request.EventTypeSubscribe, func(ctx *core.Context) { // 设置具体类型的事件处理 Handler
 			// TODO: 事件处理逻辑
-			text := message.Text(ctx, "欢迎关注")
-			server.AddFan("test1", 1, ctx.MixedMsg.MsgHeader.FromUserName)
-			ctx.RawResponse(text)
-
+			server.AddFan("test1", ctx.MixedMsg.MsgHeader.FromUserName)
+			message.Text(ctx, "欢迎关注")
 		})
 	}
 

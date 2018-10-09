@@ -27,7 +27,7 @@ const (
 	showCoverPic = 1 //显示图
 
 	materialTypeImage = "image"
-	materialTypice    = "voice"
+	materialTypeVoice = "voice"
 	materialTypeVideo = "video"
 	materialTypeThumb = "thumb"
 	materialTypeNews  = "news"

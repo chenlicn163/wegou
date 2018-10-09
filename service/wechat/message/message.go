@@ -6,16 +6,27 @@ import (
 )
 
 //文本消息
-func Text(ctx *core.Context, content string) *response.Text {
+func Text(ctx *core.Context, content string) {
 	text := response.NewText(ctx.MixedMsg.MsgHeader.FromUserName, ctx.MixedMsg.MsgHeader.ToUserName,
 		ctx.MixedMsg.MsgHeader.CreateTime, content)
-	return text
+	sendMsg(text, ctx)
 }
 
 //图片消息
-func Image(ctx *core.Context, mediaId string) *response.Image {
+func Image(ctx *core.Context, mediaId string) {
 	image := response.NewImage(ctx.MixedMsg.MsgHeader.FromUserName, ctx.MixedMsg.MsgHeader.ToUserName,
 		ctx.MixedMsg.MsgHeader.CreateTime, mediaId)
 	image.Image.MediaId = mediaId
-	return image
+	sendMsg(image, ctx)
+}
+
+//发送消息
+func sendMsg(msg interface{}, ctx *core.Context) {
+	aesKey := string(ctx.AESKey)
+	if aesKey != "" {
+		ctx.AESResponse(msg, 0, "", nil)
+	} else {
+		ctx.RawResponse(msg)
+	}
+
 }
