@@ -4,8 +4,6 @@ import (
 	"wegou/service/server"
 	"wegou/service/wechat/message"
 
-	"log"
-
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/request"
 )
@@ -39,8 +37,7 @@ func WechatServe() *core.Server {
 
 		mux.MsgHandleFunc(request.MsgTypeText, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			values := ctx.QueryParams
-			log.Println(values)
+
 			message.Text(ctx, "您输入了文本")
 		})
 		mux.MsgHandleFunc(request.MsgTypeVoice, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
@@ -49,7 +46,8 @@ func WechatServe() *core.Server {
 		})
 		mux.EventHandleFunc(request.EventTypeSubscribe, func(ctx *core.Context) { // 设置具体类型的事件处理 Handler
 			// TODO: 事件处理逻辑
-			server.AddFan("test1", ctx.MixedMsg.MsgHeader.FromUserName)
+
+			server.AddFan(ctx.QueryParams.Get("web"), ctx.MixedMsg.MsgHeader.FromUserName)
 			message.Text(ctx, "欢迎关注")
 		})
 	}
