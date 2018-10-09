@@ -32,23 +32,22 @@ func WechatServe() *core.Server {
 
 		mux.MsgHandleFunc(request.MsgTypeVoice, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			message.Text(ctx, "您输入声音")
+			message.Text(ctx.QueryParams.Get("web"), ctx, "您输入声音")
 		})
 
 		mux.MsgHandleFunc(request.MsgTypeText, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
 
-			message.Text(ctx, "您输入了文本")
+			message.Text(ctx.QueryParams.Get("web"), ctx, "您输入了文本")
 		})
 		mux.MsgHandleFunc(request.MsgTypeVoice, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			message.Image(ctx, "_c3Pe6DMtXU-zedUeoeuZgG_RuXQEgwAjIAfTyCzSd8")
+			message.Image(ctx.QueryParams.Get("web"), ctx, "_c3Pe6DMtXU-zedUeoeuZgG_RuXQEgwAjIAfTyCzSd8")
 		})
 		mux.EventHandleFunc(request.EventTypeSubscribe, func(ctx *core.Context) { // 设置具体类型的事件处理 Handler
 			// TODO: 事件处理逻辑
-
 			server.AddFan(ctx.QueryParams.Get("web"), ctx.MixedMsg.MsgHeader.FromUserName)
-			message.Text(ctx, "欢迎关注")
+			message.Text(ctx.QueryParams.Get("web"), ctx, "欢迎关注")
 		})
 	}
 
