@@ -17,7 +17,7 @@ func CustomerConsumer() {
 	// init consumer
 	brokers := kafkaConfig.Blockers
 	topics := kafkaConfig.CustomerTopics
-	consumer, err := cluster.NewConsumer(brokers, "my-consumer-group", topics, config)
+	consumer, err := cluster.NewConsumer(brokers, kafkaConfig.CustomerGroup, topics, config)
 	if err != nil {
 		panic(err)
 	}
