@@ -5,8 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"wegou/engine/routes"
-	"wegou/engine/task"
+	"wegou/engine/types"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -36,16 +35,16 @@ func init() {
 	})
 }
 
-func GetWebConfig() routes.Web {
-	conf := routes.Web{
+func GetWebConfig() types.Web {
+	conf := types.Web{
 		Host: viper.GetString("listen.host"),
 		Port: viper.GetString("listen.port"),
 	}
 	return conf
 }
 
-func GetWechatConfig() routes.Wechat {
-	conf := routes.Wechat{
+func GetWechatConfig() types.Wechat {
+	conf := types.Wechat{
 		OriId:     viper.GetString("wechat.oriid"),
 		AppId:     viper.GetString("wechat.appId"),
 		Token:     viper.GetString("wechat.token"),
@@ -55,8 +54,8 @@ func GetWechatConfig() routes.Wechat {
 	return conf
 }
 
-func GetKafkaConfig() task.Kafka {
-	conf := task.Kafka{
+func GetKafkaConfig() types.Kafka {
+	conf := types.Kafka{
 		Blockers:       strings.Split(viper.GetString("kafka.broker"), ","),
 		CustomerTopics: strings.Split(viper.GetString("kafak.customer_topic"), ","),
 		MaterialTopics: strings.Split(viper.GetString("kafak.material_topic"), ","),

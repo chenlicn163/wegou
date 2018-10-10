@@ -1,4 +1,4 @@
-package task
+package types
 
 type Kafka struct {
 	Blockers       []string

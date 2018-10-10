@@ -1,4 +1,4 @@
-package routes
+package types
 
 //站点配置
 type Web struct {

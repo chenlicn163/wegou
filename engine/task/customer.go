@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"wegou/engine/types"
 
 	cluster "github.com/bsm/sarama-cluster"
 )
 
-func CustomerConsumer(kafkaConfig Kafka) {
+func CustomerConsumer(kafkaConfig types.Kafka) {
 
 	// init (custom) config, set mode to ConsumerModePartitions
 	config := cluster.NewConfig()

@@ -8,6 +8,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"wegou/engine/types"
 	"wegou/service/server"
 
 	"github.com/gin-gonic/gin"
@@ -54,12 +55,12 @@ func DeleteMaterialServe(c *gin.Context) {
 
 	flag := server.DelMaterial(c)
 
-	StatusJson := StatusJson{}
+	StatusJson := types.StatusJson{}
 	if !flag {
-		StatusJson.Code = MaterialDelFailedCode
-		StatusJson.Message = MaterialDelFailedMsg
+		StatusJson.Code = types.MaterialDelFailedCode
+		StatusJson.Message = types.MaterialDelFailedMsg
 	} else {
-		StatusJson.Code = WechatSuccessCode
+		StatusJson.Code = types.WechatSuccessCode
 		StatusJson.Message = "success"
 	}
 
@@ -74,12 +75,12 @@ func AddMaterialServe(c *gin.Context) {
 
 	_, err := server.AddMaterial(c)
 
-	StatusJson := StatusJson{}
+	StatusJson := types.StatusJson{}
 	if err != nil {
-		StatusJson.Code = MaterialAddFailedCode
-		StatusJson.Message = MaterialAddFailedMsg + ",error:" + err.Error()
+		StatusJson.Code = types.MaterialAddFailedCode
+		StatusJson.Message = types.MaterialAddFailedMsg + ",error:" + err.Error()
 	} else {
-		StatusJson.Code = WechatSuccessCode
+		StatusJson.Code = types.WechatSuccessCode
 		StatusJson.Message = "success"
 	}
 

@@ -2,11 +2,12 @@ package routes
 
 import (
 	"wegou/engine/controller"
+	"wegou/engine/types"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Routes(wechatConfig Wechat) *gin.Engine {
+func Routes(wechatConfig types.Wechat) *gin.Engine {
 	srv := WechatServe(wechatConfig)
 	r := gin.Default()
 	r.Any("/wechat_callback/:web", func(c *gin.Context) {

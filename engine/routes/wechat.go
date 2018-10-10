@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"wegou/engine/types"
 	"wegou/service/server"
 	"wegou/service/wechat/message"
 
@@ -8,7 +9,7 @@ import (
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/request"
 )
 
-func WechatServe(wechatConfig Wechat) *core.Server {
+func WechatServe(wechatConfig types.Wechat) *core.Server {
 	mux := core.NewServeMux() // 创建 core.Handler, 也可以用自己实现的 core.Handler
 
 	// 注册消息(事件)处理 Handler, 都不是必须的!

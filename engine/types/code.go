@@ -1,4 +1,4 @@
-package controller
+package types
 
 const (
 	WechatSuccessCode     = "0"
