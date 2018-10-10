@@ -2,7 +2,6 @@ package main
 
 import (
 	"wegou/config"
-	_ "wegou/config"
 	"wegou/engine/routes"
 	"wegou/engine/task"
 )
