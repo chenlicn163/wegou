@@ -1,4 +1,4 @@
-package admin
+package controller
 
 const (
 	WechatSuccessCode     = "0"

@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
+	"wegou/engine/routes"
+	"wegou/engine/task"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -31,4 +34,34 @@ func init() {
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println("Config file changed: " + e.Name)
 	})
+}
+
+func GetWebConfig() routes.Web {
+	conf := routes.Web{
+		Host: viper.GetString("listen.host"),
+		Port: viper.GetString("listen.port"),
+	}
+	return conf
+}
+
+func GetWechatConfig() routes.Wechat {
+	conf := routes.Wechat{
+		OriId:     viper.GetString("wechat.oriid"),
+		AppId:     viper.GetString("wechat.appId"),
+		Token:     viper.GetString("wechat.token"),
+		AppSecret: viper.GetString("wechat.appsecret"),
+		AesKey:    viper.GetString("wechat.aeskey"),
+	}
+	return conf
+}
+
+func GetKafkaConfig() task.Kafka {
+	conf := task.Kafka{
+		Blockers:       strings.Split(viper.GetString("kafka.broker"), ","),
+		CustomerTopics: strings.Split(viper.GetString("kafak.customer_topic"), ","),
+		MaterialTopics: strings.Split(viper.GetString("kafak.material_topic"), ","),
+		CustomerGroup:  viper.GetString("kafka.customer_group"),
+		MaterialGroup:  viper.GetString("kafka.material_group"),
+	}
+	return conf
 }
