@@ -7,21 +7,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-//站点配置
-type Web struct {
-	Port string
-	Host string
-}
-
-//微信配置
-type Wechat struct {
-	OriId     string
-	AppId     string
-	Token     string
-	AppSecret string
-	AesKey    string
-}
-
 func GetWebConfig() Web {
 	conf := Web{
 		Host: viper.GetString("listen.host"),
