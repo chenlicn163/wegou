@@ -8,8 +8,8 @@ import (
 	cluster "github.com/bsm/sarama-cluster"
 )
 
-func CustomerConsumer() {
-	kafkaConfig := GetKafkaConfig()
+func CustomerConsumer(kafkaConfig Kafka) {
+
 	// init (custom) config, set mode to ConsumerModePartitions
 	config := cluster.NewConfig()
 	config.Group.Mode = cluster.ConsumerModePartitions

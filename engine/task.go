@@ -3,6 +3,7 @@ package engine
 import "wegou/engine/task"
 
 func Progress() {
-	go task.CustomerConsumer()
-	go task.MaterialConsumer()
+	kafkaConfig := GetKafkaConfig()
+	go task.CustomerConsumer(kafkaConfig)
+	go task.MaterialConsumer(kafkaConfig)
 }

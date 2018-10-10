@@ -1,6 +1,9 @@
 package engine
 
 import (
+	"strings"
+	"wegou/engine/task"
+
 	"github.com/spf13/viper"
 )
 
@@ -34,6 +37,17 @@ func GetWechatConfig() Wechat {
 		Token:     viper.GetString("wechat.token"),
 		AppSecret: viper.GetString("wechat.appsecret"),
 		AesKey:    viper.GetString("wechat.aeskey"),
+	}
+	return conf
+}
+
+func GetKafkaConfig() task.Kafka {
+	conf := task.Kafka{
+		Blockers:       strings.Split(viper.GetString("kafka.broker"), ","),
+		CustomerTopics: strings.Split(viper.GetString("kafak.customer_topic"), ","),
+		MaterialTopics: strings.Split(viper.GetString("kafak.material_topic"), ","),
+		CustomerGroup:  viper.GetString("kafka.customer_group"),
+		MaterialGroup:  viper.GetString("kafka.material_group"),
 	}
 	return conf
 }
