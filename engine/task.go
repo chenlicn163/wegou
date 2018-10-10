@@ -1,6 +1,6 @@
 package engine
 
-import "wegou/service/task"
+import "wegou/engine/task"
 
 func Progress() {
 	go task.CustomerConsumer()
