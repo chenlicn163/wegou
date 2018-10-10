@@ -2,7 +2,7 @@ package routes
 
 import (
 	"wegou/service/server"
-	"wegou/service/wechat/message"
+	"wegou/service/wechat"
 	"wegou/types"
 
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
@@ -33,22 +33,22 @@ func WechatServe(wechatConfig types.Wechat) *core.Server {
 
 		mux.MsgHandleFunc(request.MsgTypeVoice, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			message.Text(ctx.QueryParams.Get("web"), ctx, "您输入声音")
+			wechat.Text(ctx.QueryParams.Get("web"), ctx, "您输入声音")
 		})
 
 		mux.MsgHandleFunc(request.MsgTypeText, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			message.Text(ctx.QueryParams.Get("web"), ctx, "您输入了文本")
+			wechat.Text(ctx.QueryParams.Get("web"), ctx, "您输入了文本")
 		})
 		mux.MsgHandleFunc(request.MsgTypeVoice, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			message.Image(ctx.QueryParams.Get("web"), ctx, "_c3Pe6DMtXU-zedUeoeuZgG_RuXQEgwAjIAfTyCzSd8")
+			wechat.Image(ctx.QueryParams.Get("web"), ctx, "_c3Pe6DMtXU-zedUeoeuZgG_RuXQEgwAjIAfTyCzSd8")
 		})
 		mux.EventHandleFunc(request.EventTypeSubscribe, func(ctx *core.Context) { // 设置具体类型的事件处理 Handler
 			// TODO: 事件处理逻辑
 			web := ctx.QueryParams.Get("web")
 			server.AddFan(web, ctx.MixedMsg.MsgHeader.FromUserName)
-			message.Text(web, ctx, "欢迎关注")
+			wechat.Text(web, ctx, "欢迎关注")
 		})
 	}
 
