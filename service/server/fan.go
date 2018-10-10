@@ -51,15 +51,26 @@ func GetFanCount(c *gin.Context) (int, int, int) {
 
 //添加粉丝
 func AddFan(web string, wx string) (bool, error) {
-
 	createdAt := time.Now().Unix()
 	fan := model.Fan{
-		Wx:        wx,
-		Nickname:  "",
-		AccountId: 1,
-		CreatedAt: createdAt,
-		UpdatedAt: createdAt,
-		Status:    unCompletedStatus,
+		Wx:             wx,
+		Nickname:       "",
+		AccountId:      1,
+		CreatedAt:      createdAt,
+		UpdatedAt:      createdAt,
+		Status:         unCompletedStatus,
+		Remark:         "",
+		Sex:            0,
+		Language:       "",
+		City:           "",
+		Province:       "",
+		Country:        "",
+		Headimgurl:     "",
+		SubscribeTime:  0,
+		Unionid:        "",
+		Groupid:        0,
+		TagidList:      "",
+		SubscribeScene: "",
 	}
 
 	fan.AddFan(web)
