@@ -8,8 +8,8 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
-	"wegou/engine/types"
 	"wegou/service/server"
+	"wegou/types"
 
 	"github.com/gin-gonic/gin"
 )

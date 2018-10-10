@@ -3,8 +3,8 @@ package server
 import (
 	"strconv"
 	"time"
-	"wegou/database"
 	"wegou/model"
+	"wegou/types"
 
 	"github.com/gin-gonic/gin"
 )
@@ -37,7 +37,7 @@ func GetFanCount(c *gin.Context) (int, int, int) {
 
 	fan := model.Fan{}
 	count := fan.GetFanCount(web)
-	pageSize := database.FanPageSize
+	pageSize := types.FanPageSize
 
 	var pageNum int
 	if count%pageSize == 0 {

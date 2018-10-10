@@ -2,8 +2,8 @@ package main
 
 import (
 	"wegou/config"
-	"wegou/engine/routes"
-	"wegou/engine/task"
+	"wegou/routes"
+	"wegou/task"
 )
 
 func main() {

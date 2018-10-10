@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"wegou/engine/controller"
-	"wegou/engine/types"
+	"wegou/controller"
+	"wegou/types"
 
 	"github.com/gin-gonic/gin"
 )

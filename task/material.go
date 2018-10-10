@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"wegou/engine/types"
+	"wegou/types"
 
 	cluster "github.com/bsm/sarama-cluster"
 )
 
-func CustomerConsumer(kafkaConfig types.Kafka) {
+func MaterialConsumer(kafkaConfig types.Kafka) {
 
 	// init (custom) config, set mode to ConsumerModePartitions
 	config := cluster.NewConfig()
@@ -17,8 +17,8 @@ func CustomerConsumer(kafkaConfig types.Kafka) {
 
 	// init consumer
 	brokers := kafkaConfig.Blockers
-	topics := kafkaConfig.CustomerTopics
-	consumer, err := cluster.NewConsumer(brokers, kafkaConfig.CustomerGroup, topics, config)
+	topics := kafkaConfig.MaterialTopics
+	consumer, err := cluster.NewConsumer(brokers, kafkaConfig.MaterialGroup, topics, config)
 	if err != nil {
 		panic(err)
 	}
@@ -47,4 +47,5 @@ func CustomerConsumer(kafkaConfig types.Kafka) {
 			return
 		}
 	}
+
 }

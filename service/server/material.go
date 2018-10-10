@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"strconv"
 	"time"
-	"wegou/database"
 	"wegou/model"
 	"wegou/utils"
 
 	"github.com/gin-gonic/gin"
 	"gopkg.in/chanxuehong/wechat.v2/mp/material"
+
+	"wegou/types"
 
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 )
@@ -47,7 +48,7 @@ func FetchMaterialCount(clt *core.Client) *material.MaterialCountInfo {
 
 //批量获取永久素材
 func BatchFetchMaterial(clt *core.Client, materialType string, pageStr string) *material.BatchGetResult {
-	size := database.MaterialPageSize
+	size := types.MaterialPageSize
 	page, err := strconv.Atoi(pageStr)
 	if err != nil {
 		page = 1
@@ -118,7 +119,7 @@ func GetMaterialCount(c *gin.Context) (int, int, int) {
 
 	mat := model.Material{}
 	count := mat.GetMaterialCount(web, MaterialType, sourceType, status)
-	pageSize := database.MaterialPageSize
+	pageSize := types.MaterialPageSize
 
 	var pageNum int
 	if count%pageSize == 0 {

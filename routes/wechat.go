@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"wegou/engine/types"
 	"wegou/service/server"
 	"wegou/service/wechat/message"
+	"wegou/types"
 
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/request"

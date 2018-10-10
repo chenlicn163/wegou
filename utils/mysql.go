@@ -1,7 +1,8 @@
-package database
+package utils
 
 import (
 	"fmt"
+	"wegou/config"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -10,7 +11,7 @@ import (
 //var conn *gorm.DB
 
 func Open(account string) (db *gorm.DB) {
-	conf := GetDbConfig(account)
+	conf := config.GetDbConfig(account)
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True",
 		conf.User, conf.Password, conf.Host, conf.Port, conf.DbName)
 	db, err := gorm.Open("mysql", dsn)

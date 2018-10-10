@@ -1,7 +1,8 @@
 package model
 
 import (
-	"wegou/database"
+	"wegou/types"
+	"wegou/utils"
 )
 
 type Fan struct {
@@ -27,10 +28,10 @@ type Fan struct {
 }
 
 func (fan *Fan) GetFan(web string, page int) []Fan {
-	pageSize := database.FanPageSize
+	pageSize := types.FanPageSize
 	offset := pageSize * (page - 1)
 
-	conn := database.Open(web)
+	conn := utils.Open(web)
 	defer conn.Close()
 	if conn == nil {
 		return nil
@@ -47,7 +48,7 @@ func (fan *Fan) GetFan(web string, page int) []Fan {
 
 func (fan *Fan) GetFanCount(web string) int {
 
-	conn := database.Open(web)
+	conn := utils.Open(web)
 	defer conn.Close()
 	if conn == nil {
 		return 0
@@ -62,7 +63,7 @@ func (fan *Fan) GetFanCount(web string) int {
 }
 
 func (fan *Fan) AddFan(web string) bool {
-	conn := database.Open(web)
+	conn := utils.Open(web)
 	defer conn.Close()
 	conn.Model(&Fan{}).Create(fan)
 	return true

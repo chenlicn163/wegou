@@ -2,10 +2,11 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
-	"wegou/engine/types"
+	"wegou/types"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -62,5 +63,19 @@ func GetKafkaConfig() types.Kafka {
 		CustomerGroup:  viper.GetString("kafka.customer_group"),
 		MaterialGroup:  viper.GetString("kafka.material_group"),
 	}
+	return conf
+}
+
+func GetDbConfig(account string) types.Db {
+	dbConfig := viper.GetString("account." + account)
+	log.Println(dbConfig)
+	conf := types.Db{
+		Host:     viper.GetString(dbConfig + ".host"),
+		Port:     viper.GetString(dbConfig + ".port"),
+		User:     viper.GetString(dbConfig + ".user"),
+		Password: viper.GetString(dbConfig + ".password"),
+		DbName:   viper.GetString(dbConfig + ".db_name"),
+	}
+
 	return conf
 }

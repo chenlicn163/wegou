@@ -14,3 +14,12 @@ type Wechat struct {
 	AppSecret string
 	AesKey    string
 }
+
+//数据库配置
+type Db struct {
+	Host     string
+	Port     string
+	User     string
+	Password string
+	DbName   string
+}
