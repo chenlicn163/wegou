@@ -3,27 +3,39 @@ package controller
 import (
 	"net/http"
 	"wegou/service/server"
+	"wegou/types"
 
 	"github.com/gin-gonic/gin"
 )
 
 //查询粉丝
 func ListFansServe(c *gin.Context) {
-	fans := server.GetFan(c)
-	count, pageSize, pageNum := server.GetFanCount(c)
+	result := server.GetFan(c)
+	var data map[string]interface{}
+	if result.Code == types.WechatSuccessCode {
+		rslt := result.Data.(map[string]interface{})
+		page := rslt["page"].(map[string]int)
 
-	c.JSON(http.StatusOK, gin.H{
-		"code":    "0",
-		"message": "success",
-		"data": map[string]interface{}{
-			"fans": fans,
+		data = map[string]interface{}{
+			"fans": rslt["fans"],
 			"page": map[string]int{
-				"count":     count,
-				"page_size": pageSize,
-				"page_num":  pageNum,
+				"page_count": page["page_count"],
+				"page_size":  page["page_size"],
+				"page_num":   page["page_num"],
 			},
-		},
-	})
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"code":    result.Code,
+			"message": result.Message,
+			"data":    data,
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    result.Code,
+			"message": result.Message,
+		})
+	}
+
 }
 
 //删除粉丝

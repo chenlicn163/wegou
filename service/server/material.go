@@ -1,7 +1,6 @@
 package server
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -83,61 +82,100 @@ func SyncDelMaterial() {
 //---------------------------------------------------------------------------------------------
 
 //获取素材
-func GetMaterial(c *gin.Context) []model.Material {
+func GetMaterial(c *gin.Context) types.Dto {
+
+	result := types.Dto{}
+
+	web := c.Param("web")
+	if web != "" {
+		result.Code = types.WebFiledCode
+		result.Code = types.WebFiledMsg
+		return result
+	}
 
 	pageStr := c.Query("page")
-	MaterialType := c.Query("material")
-	sourceType := c.Query("source")
-	statusStr := c.Query("status")
-	web := c.Param("web")
-
 	page, err := strconv.Atoi(pageStr)
 	if err != nil {
 		page = 1
 	}
 
+	MaterialType := c.Query("material")
+	MaterialTypeValues := []string{strconv.Itoa(materialTemporary), strconv.Itoa(materialForever)}
+	if exists, _ := utils.InArray(MaterialType, MaterialTypeValues); MaterialType != "" && !exists {
+		result.Code = types.MaterialTypeErrorCode
+		result.Message = types.MaterialTypeErrorMsg
+		return result
+	}
+
+	statusStr := c.Query("status")
+	statusValues := []string{strconv.Itoa(availableStatus), strconv.Itoa(addedStatus), strconv.Itoa(deletedStatus)}
+	if exists, _ := utils.InArray(statusStr, statusValues); statusStr != "" && !exists {
+		result.Code = types.SourceStatusErrorCode
+		result.Message = types.SourceStatusErrorMsg
+		return result
+	}
 	status, err := strconv.Atoi(statusStr)
 	if err != nil {
 		status = 0
 	}
 
-	mat := model.Material{}
-	materials := mat.GetMaterial(web, page, MaterialType, sourceType, status)
-
-	return materials
-}
-
-//获取素材数量
-func GetMaterialCount(c *gin.Context) (int, int, int) {
-
-	MaterialType := c.Query("material")
 	sourceType := c.Query("source")
-	statusStr := c.Query("status")
-	web := c.Param("web")
-
-	status, _ := strconv.Atoi(statusStr)
-
-	mat := model.Material{}
-	count := mat.GetMaterialCount(web, MaterialType, sourceType, status)
-	pageSize := types.MaterialPageSize
-
-	var pageNum int
-	if count%pageSize == 0 {
-		pageNum = count / pageSize
-	} else {
-		pageNum = count/pageSize + 1
+	sourceTypeValues := []string{materialTypeImage, materialTypeVoice, materialTypeVideo, materialTypeThumb,
+		materialTypeNews}
+	if exists, _ := utils.InArray(sourceType, sourceTypeValues); sourceType != "" && !exists {
+		result.Code = types.SourceTypeErrorCode
+		result.Message = types.SourceTypeErrorMsg
+		return result
 	}
 
-	return count, pageSize, pageNum
+	mat := model.Material{}
+	pageCount := mat.GetMaterialCount(web, MaterialType, sourceType, status)
+	pageSize := types.MaterialPageSize
+	var pageNum int
+	if pageCount%pageSize == 0 {
+		pageNum = pageCount / pageSize
+	} else {
+		pageNum = pageCount/pageSize + 1
+	}
+	materials := mat.GetMaterial(web, page, MaterialType, sourceType, status)
 
+	result.Code = types.WechatSuccessCode
+	result.Message = types.WechatSuccessMsg
+	result.Data = map[string]interface{}{
+		"materials": materials,
+		"page": map[string]int{
+			"page_count": pageCount,
+			"page_size":  pageSize,
+			"page_num":   pageNum,
+		},
+	}
+	return result
 }
 
 //添加素材
-func AddMaterial(c *gin.Context) (bool, error) {
+func AddMaterial(c *gin.Context) types.Dto {
+
+	result := types.Dto{}
+
+	web := c.Param("web")
+	if web != "" {
+		result.Code = types.WebFiledCode
+		result.Code = types.WebFiledMsg
+		return result
+	}
+
+	title := c.PostForm("title")
+	if title == "" {
+		result.Code = types.MaterialTitleAddFailedCode
+		result.Message = types.MaterialTitleAddFailedMsg
+		return result
+	}
 
 	fileName, err := utils.Upload(c.Request, "upload")
 	if err != nil {
-		return false, errors.New("field upload :" + err.Error())
+		result.Code = types.MaterialFileAddFailedCode
+		result.Message = types.MaterialFileAddFailedMsg
+		return result
 	}
 
 	showCoverPic, err := strconv.Atoi(c.PostForm("show_cover_pic"))
@@ -152,20 +190,31 @@ func AddMaterial(c *gin.Context) (bool, error) {
 
 	accountId, err := strconv.Atoi(c.PostForm("account_id"))
 	if err != nil {
-		return false, errors.New("field account_id :" + err.Error())
+		result.Code = types.MaterialFileAddFailedCode
+		result.Message = types.MaterialFileAddFailedMsg
+		return result
 	}
 
 	sourceType := c.PostForm("source_type")
-	if sourceType == "" {
-		return false, err
+	sourceTypeValues := []string{materialTypeImage, materialTypeVoice, materialTypeVideo, materialTypeThumb,
+		materialTypeNews}
+	if exists, _ := utils.InArray(sourceType, sourceTypeValues); sourceType != "" && !exists {
+		result.Code = types.MaterialSourceTypeAddFailedCode
+		result.Message = types.MaterialSourceTypeAddFailedMsg
+		return result
 	}
+
+	author := c.PostForm("author")
+	digest := c.PostForm("digest")
+	content := c.PostForm("content")
+
 	createdAt := time.Now().Unix()
 	mat := model.Material{
-		Title:        c.PostForm("title"),
+		Title:        title,
 		Pic:          fileName,
-		Author:       c.PostForm("author"),
-		Digest:       c.PostForm("digest"),
-		Content:      c.PostForm("content"),
+		Author:       author,
+		Digest:       digest,
+		Content:      content,
 		ShowCoverPic: showCoverPic,
 		MaterialType: materialType,
 		AccountId:    accountId,
@@ -175,23 +224,38 @@ func AddMaterial(c *gin.Context) (bool, error) {
 		UpdatedAt:    createdAt,
 	}
 
-	web := c.Param("web")
 	mat.AddMaterial(web)
-	return true, nil
+	result.Code = types.WechatSuccessCode
+	result.Message = types.WechatSuccessMsg
+	return result
 }
 
 //删除素材
-func DelMaterial(c *gin.Context) bool {
+func DelMaterial(c *gin.Context) types.Dto {
+	result := types.Dto{}
+
+	web := c.Param("web")
+	if web != "" {
+		result.Code = types.WebFiledCode
+		result.Code = types.WebFiledMsg
+		return result
+	}
+
 	idStr := c.Param("id")
-	id, _ := strconv.Atoi(idStr)
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		result.Code = types.MaterialIdDeleteFailedCode
+		result.Message = types.MaterialIdDeleteFailedMsg
+		return result
+	}
 	mat := model.Material{}
 	mat.Id = id
 	//标记为删除状态
 	mat.Status = deletedStatus
-	web := c.Param("web")
 	mat.UpdateMaterial(web)
 
 	//触发任务，删除微信服务器
-
-	return true
+	result.Code = types.WechatSuccessCode
+	result.Message = types.WechatSuccessMsg
+	return result
 }

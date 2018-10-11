@@ -15,9 +15,16 @@ const (
 )
 
 //粉丝列表
-func GetFan(c *gin.Context) []model.Fan {
-	pageStr := c.Query("page")
+func GetFan(c *gin.Context) types.Dto {
+	result := types.Dto{}
 	web := c.Param("web")
+	if web != "" {
+		result.Code = types.WebFiledCode
+		result.Code = types.WebFiledMsg
+		return result
+	}
+
+	pageStr := c.Query("page")
 
 	page, err := strconv.Atoi(pageStr)
 	if err != nil {
@@ -27,30 +34,32 @@ func GetFan(c *gin.Context) []model.Fan {
 	fan := model.Fan{}
 	fans := fan.GetFan(web, page)
 
-	return fans
-}
-
-//粉丝数量
-func GetFanCount(c *gin.Context) (int, int, int) {
-
-	web := c.Param("web")
-
-	fan := model.Fan{}
-	count := fan.GetFanCount(web)
+	pageCount := fan.GetFanCount(web)
 	pageSize := types.FanPageSize
 
 	var pageNum int
-	if count%pageSize == 0 {
-		pageNum = count / pageSize
+	if pageCount%pageSize == 0 {
+		pageNum = pageCount / pageSize
 	} else {
-		pageNum = count/pageSize + 1
+		pageNum = pageCount/pageSize + 1
 	}
 
-	return count, pageSize, pageNum
+	result.Code = types.WechatSuccessCode
+	result.Message = types.WechatSuccessMsg
+	result.Data = map[string]interface{}{
+		"materials": fans,
+		"page": map[string]int{
+			"page_count": pageCount,
+			"page_size":  pageSize,
+			"page_num":   pageNum,
+		},
+	}
+	return result
 }
 
 //添加粉丝
-func AddFan(web string, wx string) (bool, error) {
+func AddFan(web string, wx string) types.Dto {
+	result := types.Dto{}
 	createdAt := time.Now().Unix()
 	fan := model.Fan{
 		Wx:             wx,
@@ -73,6 +82,8 @@ func AddFan(web string, wx string) (bool, error) {
 		SubscribeScene: "",
 	}
 
-	fan.AddFan(web)
-	return true, nil
+	result.Code = types.WechatSuccessCode
+	result.Message = types.WechatSuccessMsg
+	result.Data = fan
+	return result
 }

@@ -23,3 +23,14 @@ type Db struct {
 	Password string
 	DbName   string
 }
+
+type StatusJson struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
+type Dto struct {
+	Data    interface{}
+	Code    string
+	Message string
+}

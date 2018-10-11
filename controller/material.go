@@ -17,21 +17,32 @@ import (
 //查询永久素材
 func ListMaterialServe(c *gin.Context) {
 
-	materials := server.GetMaterial(c)
-	count, pageSize, pageNum := server.GetMaterialCount(c)
+	result := server.GetMaterial(c)
 
-	c.JSON(http.StatusOK, gin.H{
-		"code":    "0",
-		"message": "success",
-		"data": map[string]interface{}{
-			"materials": materials,
+	var data map[string]interface{}
+	if result.Code == types.WechatSuccessCode {
+		rslt := result.Data.(map[string]interface{})
+		page := rslt["page"].(map[string]int)
+
+		data = map[string]interface{}{
+			"materials": rslt["materials"],
 			"page": map[string]int{
-				"count":     count,
-				"page_size": pageSize,
-				"page_num":  pageNum,
+				"page_count": page["page_count"],
+				"page_size":  page["page_size"],
+				"page_num":   page["page_num"],
 			},
-		},
-	})
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"code":    result.Code,
+			"message": result.Message,
+			"data":    data,
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    result.Code,
+			"message": result.Message,
+		})
+	}
 
 	/*c.Writer.Header().Set("Content-Type", "application/json")
 	c.Writer.Write(jsonStr)*/
@@ -53,40 +64,22 @@ func ListMaterialServe(c *gin.Context) {
 //删除永久素材
 func DeleteMaterialServe(c *gin.Context) {
 
-	flag := server.DelMaterial(c)
-
-	StatusJson := types.StatusJson{}
-	if !flag {
-		StatusJson.Code = types.MaterialDelFailedCode
-		StatusJson.Message = types.MaterialDelFailedMsg
-	} else {
-		StatusJson.Code = types.WechatSuccessCode
-		StatusJson.Message = "success"
-	}
+	result := server.DelMaterial(c)
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusJson.Code,
-		"message": StatusJson.Message,
+		"code":    result.Code,
+		"message": result.Message,
 	})
 }
 
 //添加永久素材
 func AddMaterialServe(c *gin.Context) {
 
-	_, err := server.AddMaterial(c)
-
-	StatusJson := types.StatusJson{}
-	if err != nil {
-		StatusJson.Code = types.MaterialAddFailedCode
-		StatusJson.Message = types.MaterialAddFailedMsg + ",error:" + err.Error()
-	} else {
-		StatusJson.Code = types.WechatSuccessCode
-		StatusJson.Message = "success"
-	}
+	result := server.AddMaterial(c)
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusJson.Code,
-		"message": StatusJson.Message,
+		"code":    result.Code,
+		"message": result.Message,
 	})
 }
 
@@ -122,7 +115,7 @@ func AddFileServe(c *gin.Context) {
 	writer.Close()
 
 	client := &http.Client{}
-	req, err := http.NewRequest(http.MethodPut, "http://127.0.0.1:8090/controller/material/test1", buf)
+	req, err := http.NewRequest(http.MethodPut, "http://127.0.0.1:8090/wegou/material/test1", buf)
 	if err != nil {
 		log.Fatalf("New request failed: %s\n", err)
 	}
