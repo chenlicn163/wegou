@@ -24,11 +24,6 @@ type Db struct {
 	DbName   string
 }
 
-type StatusJson struct {
-	Code    string `json:"code"`
-	Message string `json:"message"`
-}
-
 type Dto struct {
 	Data    interface{}
 	Code    string

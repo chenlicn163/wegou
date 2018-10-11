@@ -8,11 +8,16 @@ import (
 type Account struct {
 	Id          int    `json:"id"`
 	Name        string `json:"name"`
+	Oriid       string `json:"oriid"`
 	Appid       string `json:"appid"`
+	Appsecret   string `json:"appsecret"`
 	Tocken      string `json:"tocken"`
+	Aeskey      string `json:"aeskey"`
 	CreatedTime int64  `json:"created_time"`
 	UpdatedTime int64  `json:"updated_time"`
 	AccountType int    `json:"account_type"`
+	ServiceType int    `json:"service_type"`
+	Status      int    `json:"status"`
 }
 
 //获取公众号
@@ -27,18 +32,18 @@ func (account *Account) GetAccount(web string, page int) []Account {
 	}
 
 	var accounts []Account
-	conn.Model(&Fan{}).
+	conn.Model(&Account{}).
 		Offset(offset).Limit(pageSize).
 		Find(&accounts)
 
 	return accounts
 }
 
-func (account *Account) GetAccountById(web string) {
+func (account *Account) GetAccountByName(web string) {
 	conn := utils.Open(web)
-	conn.Model(&Fan{}).
-		Where("id=?", account.Id).
-		Find(&account)
+	defer conn.Close()
+	conn.Model(&Account{}).
+		Where("name=?", account.Name).First(&account)
 
 }
 

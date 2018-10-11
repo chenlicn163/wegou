@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -68,7 +67,7 @@ func GetKafkaConfig() types.Kafka {
 
 func GetDbConfig(account string) types.Db {
 	dbConfig := viper.GetString("account." + account)
-	log.Println(dbConfig)
+	//log.Println(dbConfig)
 	conf := types.Db{
 		Host:     viper.GetString(dbConfig + ".host"),
 		Port:     viper.GetString(dbConfig + ".port"),
