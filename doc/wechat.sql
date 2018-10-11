@@ -8,21 +8,21 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema wechat
+-- Schema wechat-test1
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema wechat
+-- Schema wechat-test1
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `wechat` DEFAULT CHARACTER SET utf8 ;
-USE `wechat` ;
+CREATE SCHEMA IF NOT EXISTS `wechat-test1` DEFAULT CHARACTER SET utf8 ;
+USE `wechat-test1` ;
 
 -- -----------------------------------------------------
--- Table `wechat`.`account`
+-- Table `wechat-test1`.`account`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `wechat`.`account` ;
+DROP TABLE IF EXISTS `wechat-test1`.`account` ;
 
-CREATE TABLE IF NOT EXISTS `wechat`.`account` (
+CREATE TABLE IF NOT EXISTS `wechat-test1`.`account` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL DEFAULT '' COMMENT '公众号名称',
   `appid` VARCHAR(45) NOT NULL DEFAULT '',
@@ -36,11 +36,11 @@ COMMENT = '公众号';
 
 
 -- -----------------------------------------------------
--- Table `wechat`.`fan`
+-- Table `wechat-test1`.`fan`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `wechat`.`fan` ;
+DROP TABLE IF EXISTS `wechat-test1`.`fan` ;
 
-CREATE TABLE IF NOT EXISTS `wechat`.`fan` (
+CREATE TABLE IF NOT EXISTS `wechat-test1`.`fan` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `wx` VARCHAR(45) NOT NULL DEFAULT '' COMMENT '微信号id',
   `nickname` VARCHAR(45) NOT NULL DEFAULT '' COMMENT '昵称',
@@ -67,11 +67,11 @@ COMMENT = '粉丝';
 
 
 -- -----------------------------------------------------
--- Table `wechat`.`event`
+-- Table `wechat-test1`.`event`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `wechat`.`event` ;
+DROP TABLE IF EXISTS `wechat-test1`.`event` ;
 
-CREATE TABLE IF NOT EXISTS `wechat`.`event` (
+CREATE TABLE IF NOT EXISTS `wechat-test1`.`event` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `send_content` VARCHAR(255) NULL DEFAULT '' COMMENT '发送内容',
   `reply_content` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '回复内容',
@@ -87,11 +87,11 @@ COMMENT = '事件';
 
 
 -- -----------------------------------------------------
--- Table `wechat`.`material`
+-- Table `wechat-test1`.`material`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `wechat`.`material` ;
+DROP TABLE IF EXISTS `wechat-test1`.`material` ;
 
-CREATE TABLE IF NOT EXISTS `wechat`.`material` (
+CREATE TABLE IF NOT EXISTS `wechat-test1`.`material` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `pid` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '父级',
   `title` VARCHAR(45) NOT NULL DEFAULT '' COMMENT '标题',
@@ -119,11 +119,11 @@ COMMENT = '素材\n';
 
 
 -- -----------------------------------------------------
--- Table `wechat`.`acount_statistics`
+-- Table `wechat-test1`.`acount_statistics`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `wechat`.`acount_statistics` ;
+DROP TABLE IF EXISTS `wechat-test1`.`acount_statistics` ;
 
-CREATE TABLE IF NOT EXISTS `wechat`.`acount_statistics` (
+CREATE TABLE IF NOT EXISTS `wechat-test1`.`acount_statistics` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `text_num` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '文本消息发送次数',
   `media_num` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '图文发送次数',
@@ -139,11 +139,11 @@ COMMENT = '群发消息统计';
 
 
 -- -----------------------------------------------------
--- Table `wechat`.`message_statistics`
+-- Table `wechat-test1`.`message_statistics`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `wechat`.`message_statistics` ;
+DROP TABLE IF EXISTS `wechat-test1`.`message_statistics` ;
 
-CREATE TABLE IF NOT EXISTS `wechat`.`message_statistics` (
+CREATE TABLE IF NOT EXISTS `wechat-test1`.`message_statistics` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `message_num` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '文本消息发送次数',
   `forver_num` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '永久消息发送次数',
@@ -158,11 +158,11 @@ COMMENT = '被动回复消息统计';
 
 
 -- -----------------------------------------------------
--- Table `wechat`.`menu`
+-- Table `wechat-test1`.`menu`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `wechat`.`menu` ;
+DROP TABLE IF EXISTS `wechat-test1`.`menu` ;
 
-CREATE TABLE IF NOT EXISTS `wechat`.`menu` (
+CREATE TABLE IF NOT EXISTS `wechat-test1`.`menu` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL DEFAULT '' COMMENT '菜单名称',
   `type` VARCHAR(45) NOT NULL DEFAULT '' COMMENT '菜单类型',
@@ -178,11 +178,11 @@ COMMENT = '菜单';
 
 
 -- -----------------------------------------------------
--- Table `wechat`.`message`
+-- Table `wechat-test1`.`message`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `wechat`.`message` ;
+DROP TABLE IF EXISTS `wechat-test1`.`message` ;
 
-CREATE TABLE IF NOT EXISTS `wechat`.`message` (
+CREATE TABLE IF NOT EXISTS `wechat-test1`.`message` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `message_type` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '被动回复\n1 文本消息\n2 图片消息\n3 语音消息\n4 视频消息\n5 音乐消息\n6 图文消息',
   `send_content` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '发送内容',
@@ -198,11 +198,11 @@ COMMENT = '被动消息';
 
 
 -- -----------------------------------------------------
--- Table `wechat`.`group_history`
+-- Table `wechat-test1`.`group_history`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `wechat`.`group_history` ;
+DROP TABLE IF EXISTS `wechat-test1`.`group_history` ;
 
-CREATE TABLE IF NOT EXISTS `wechat`.`group_history` (
+CREATE TABLE IF NOT EXISTS `wechat-test1`.`group_history` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `content` VARCHAR(45) NOT NULL DEFAULT '' COMMENT '发送内容',
   `send_time` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '发送时间',

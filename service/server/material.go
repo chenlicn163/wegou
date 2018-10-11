@@ -87,7 +87,7 @@ func GetMaterial(c *gin.Context) types.Dto {
 	result := types.Dto{}
 
 	web := c.Param("web")
-	if web != "" {
+	if web == "" {
 		result.Code = types.WebFiledCode
 		result.Code = types.WebFiledMsg
 		return result
@@ -158,7 +158,7 @@ func AddMaterial(c *gin.Context) types.Dto {
 	result := types.Dto{}
 
 	web := c.Param("web")
-	if web != "" {
+	if web == "" {
 		result.Code = types.WebFiledCode
 		result.Code = types.WebFiledMsg
 		return result
@@ -171,7 +171,11 @@ func AddMaterial(c *gin.Context) types.Dto {
 		return result
 	}
 
-	fileName, err := utils.Upload(c.Request, "upload")
+	uploadPath := "upload/" + web + "/" +
+		strconv.Itoa(time.Now().Year()) + "/" +
+		strconv.Itoa(int(time.Now().Month())) + "/" +
+		strconv.Itoa(time.Now().Day())
+	fileName, err := utils.Upload(c.Request, uploadPath)
 	if err != nil {
 		result.Code = types.MaterialFileAddFailedCode
 		result.Message = types.MaterialFileAddFailedMsg
@@ -235,7 +239,7 @@ func DelMaterial(c *gin.Context) types.Dto {
 	result := types.Dto{}
 
 	web := c.Param("web")
-	if web != "" {
+	if web == "" {
 		result.Code = types.WebFiledCode
 		result.Code = types.WebFiledMsg
 		return result

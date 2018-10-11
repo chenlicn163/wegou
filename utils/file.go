@@ -5,13 +5,23 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/hex"
+	"errors"
 	"io"
 	"net/http"
 	"os"
 	"path"
 )
 
-func Upload(r *http.Request, UploadPath string) (string, error) {
+func Upload(r *http.Request, uploadPath string) (string, error) {
+	//判断目录是否存在
+	exists, _ := PathExists(uploadPath)
+	if !exists {
+		err := os.MkdirAll(uploadPath, os.ModePerm)
+		if err != nil {
+			return "", errors.New("目录创建失败")
+		}
+	}
+
 	//上传文件
 	formFile, header, err := r.FormFile("file")
 	defer formFile.Close()
@@ -22,7 +32,7 @@ func Upload(r *http.Request, UploadPath string) (string, error) {
 	fileSuffix := path.Ext(path.Base(header.Filename))
 
 	fileName := UniqueId() + fileSuffix
-	fullFileName := UploadPath + "/" + fileName
+	fullFileName := uploadPath + "/" + fileName
 	destFile, err := os.Create(fullFileName)
 	defer destFile.Close()
 	if err != nil {

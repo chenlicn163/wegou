@@ -115,7 +115,7 @@ func AddFileServe(c *gin.Context) {
 	writer.Close()
 
 	client := &http.Client{}
-	req, err := http.NewRequest(http.MethodPut, "http://127.0.0.1:8090/wegou/material/test1", buf)
+	req, err := http.NewRequest(http.MethodPut, "http://127.0.0.1:8090/wegou/material/"+c.PostForm("web"), buf)
 	if err != nil {
 		log.Fatalf("New request failed: %s\n", err)
 	}

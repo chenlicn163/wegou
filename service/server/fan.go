@@ -18,7 +18,7 @@ const (
 func GetFan(c *gin.Context) types.Dto {
 	result := types.Dto{}
 	web := c.Param("web")
-	if web != "" {
+	if web == "" {
 		result.Code = types.WebFiledCode
 		result.Code = types.WebFiledMsg
 		return result
@@ -60,6 +60,13 @@ func GetFan(c *gin.Context) types.Dto {
 //添加粉丝
 func AddFan(web string, wx string) types.Dto {
 	result := types.Dto{}
+
+	if web == "" {
+		result.Code = types.WebFiledCode
+		result.Code = types.WebFiledMsg
+		return result
+	}
+
 	createdAt := time.Now().Unix()
 	fan := model.Fan{
 		Wx:             wx,
