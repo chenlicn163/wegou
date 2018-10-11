@@ -24,6 +24,15 @@ type Db struct {
 	DbName   string
 }
 
+//kafk配置
+type Kafka struct {
+	Blockers       []string
+	CustomerTopics []string
+	MaterialTopics []string
+	CustomerGroup  string
+	MaterialGroup  string
+}
+
 type Dto struct {
 	Data    interface{}
 	Code    string
