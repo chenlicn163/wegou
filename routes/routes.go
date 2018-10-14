@@ -8,12 +8,12 @@ import (
 )
 
 func Routes() *gin.Engine {
-	srv := WechatServe()
 	r := gin.Default()
 	r.Use(middlewares.AuthAccount())
 	r.Any("/wechat_callback/:web", func(c *gin.Context) {
 		query := c.Request.URL.Query()
 		query.Add("web", c.Param("web"))
+		srv := WechatServe()
 		srv.ServeHTTP(c.Writer, c.Request, query)
 	})
 	wegou := r.Group("/wegou")
