@@ -24,6 +24,8 @@ func WechatServe() *core.Server {
 		})
 		mux.UseFuncForMsg(func(ctx *core.Context) { // 注册中间件, 处理所有的消息
 			// TODO: 中间件处理逻辑
+			web := ctx.QueryParams.Get("web")
+			account, _ = server.GetAccountCache(web)
 		})
 		mux.UseFuncForEvent(func(ctx *core.Context) { // 注册中间件, 处理所有的事件
 			// TODO: 中间件处理逻辑
