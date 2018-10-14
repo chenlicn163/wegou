@@ -43,17 +43,6 @@ func GetWebConfig() types.Web {
 	return conf
 }
 
-func GetWechatConfig() types.Wechat {
-	conf := types.Wechat{
-		OriId:     viper.GetString("wechat.oriid"),
-		AppId:     viper.GetString("wechat.appId"),
-		Token:     viper.GetString("wechat.token"),
-		AppSecret: viper.GetString("wechat.appsecret"),
-		AesKey:    viper.GetString("wechat.aeskey"),
-	}
-	return conf
-}
-
 func GetKafkaConfig() types.Kafka {
 	conf := types.Kafka{
 		Blockers:       strings.Split(viper.GetString("kafka.broker"), ","),
