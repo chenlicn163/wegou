@@ -19,8 +19,8 @@ func GetFan(c *gin.Context) types.Dto {
 	result := types.Dto{}
 	web := c.Param("web")
 	if web == "" {
-		result.Code = types.WebFiledCode
-		result.Code = types.WebFiledMsg
+		result.Code = types.AccountParamErrorCode
+		result.Message = types.AccountParamErrorMsg
 		return result
 	}
 
@@ -62,8 +62,15 @@ func AddFan(web string, wx string) types.Dto {
 	result := types.Dto{}
 
 	if web == "" {
-		result.Code = types.WebFiledCode
-		result.Code = types.WebFiledMsg
+		result.Code = types.AccountParamErrorCode
+		result.Code = types.AccountParamErrorMsg
+		return result
+	}
+
+	account, err := GetAccountCache(web)
+	if err != nil {
+		result.Code = types.AccountNotExistCode
+		result.Code = types.AccountNotExistMsg
 		return result
 	}
 
@@ -71,7 +78,7 @@ func AddFan(web string, wx string) types.Dto {
 	fan := model.Fan{
 		Wx:             wx,
 		Nickname:       "",
-		AccountId:      1,
+		AccountId:      account.Id,
 		CreatedAt:      createdAt,
 		UpdatedAt:      createdAt,
 		Status:         unCompletedStatus,

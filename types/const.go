@@ -9,8 +9,10 @@ const (
 	WechatSuccessMsg  = "success"
 
 	//web管理
-	WebFiledCode = "10001"
-	WebFiledMsg  = "公众号错误"
+	AccountParamErrorCode = "10001"
+	AccountParamErrorMsg  = "公众号参数错误"
+	AccountNotExistCode   = "10002"
+	AccountNotExistMsg    = "公众号不存在"
 
 	//永久资源管理
 	MaterialDelFailedCode           = "20001"

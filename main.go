@@ -6,6 +6,10 @@ import (
 	"wegou/task"
 )
 
+func init() {
+	config.InitLog()
+}
+
 func main() {
 
 	//启动服务
@@ -13,8 +17,7 @@ func main() {
 	go task.CustomerConsumer(kafkaConfig)
 	go task.MaterialConsumer(kafkaConfig)
 
-	wechatConfig := config.GetWechatConfig()
-	r := routes.Routes(wechatConfig)
+	r := routes.Routes()
 	webConfig := config.GetWebConfig()
 	addr := webConfig.Host + ":" + webConfig.Port
 	r.Run(addr)

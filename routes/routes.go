@@ -2,20 +2,23 @@ package routes
 
 import (
 	"wegou/controller"
-	"wegou/types"
+	"wegou/service/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Routes(wechatConfig types.Wechat) *gin.Engine {
-	srv := WechatServe(wechatConfig)
+func Routes() *gin.Engine {
+	srv := WechatServe()
 	r := gin.Default()
+	r.Use(middlewares.AuthAccount())
 	r.Any("/wechat_callback/:web", func(c *gin.Context) {
 		query := c.Request.URL.Query()
 		query.Add("web", c.Param("web"))
 		srv.ServeHTTP(c.Writer, c.Request, query)
 	})
 	wegou := r.Group("/wegou")
+
+	wegou.Use(middlewares.AuthAccount())
 	//素材管理
 	wegou.GET("/material/:web", controller.ListMaterialServe)
 	wegou.DELETE("/material/:web/:id", controller.DeleteMaterialServe)

@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `wegou`.`account` (
   `appsecret` VARCHAR(255) NOT NULL DEFAULT '',
   `aeskey` VARCHAR(255) NOT NULL DEFAULT '',
   `oriid` VARCHAR(255) NOT NULL DEFAULT '',
-  `tocken` VARCHAR(255) NOT NULL DEFAULT '',
+  `token` VARCHAR(255) NOT NULL DEFAULT '',
   `created_time` INT UNSIGNED NOT NULL DEFAULT 0,
   `updated_time` INT UNSIGNED NOT NULL DEFAULT 0,
   `account_type` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '类型\n1 未认证订阅号\n2 微信认证订阅号\n3 未认证服务号\n4 微信认证服务号\n5 测试公众号',

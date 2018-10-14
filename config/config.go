@@ -18,7 +18,7 @@ func init() {
 	}
 
 	viper.Set("app_path", appPath)
-	//viper.Set("log_path", filepath.Join(appPath, "logs"))
+	viper.Set("log_path", filepath.Join(appPath, "logs"))
 	viper.Set("config_path", filepath.Join(appPath, "config.conf"))
 
 	viper.SetConfigType("toml")
@@ -66,14 +66,23 @@ func GetKafkaConfig() types.Kafka {
 }
 
 func GetDbConfig(account string) types.Db {
-	dbConfig := viper.GetString("account." + account)
 	//log.Println(dbConfig)
 	conf := types.Db{
-		Host:     viper.GetString(dbConfig + ".host"),
-		Port:     viper.GetString(dbConfig + ".port"),
-		User:     viper.GetString(dbConfig + ".user"),
-		Password: viper.GetString(dbConfig + ".password"),
-		DbName:   viper.GetString(dbConfig + ".db_name"),
+		Host:     viper.GetString(account + ".host"),
+		Port:     viper.GetString(account + ".port"),
+		User:     viper.GetString(account + ".user"),
+		Password: viper.GetString(account + ".password"),
+		DbName:   viper.GetString(account + ".db_name"),
+	}
+
+	return conf
+}
+
+func GetRedisConfig(account string) types.Redis {
+	conf := types.Redis{
+		Server: viper.GetString(account + ".redis_server"),
+		Auth:   viper.GetString(account + ".redis_auth"),
+		Db:     viper.GetInt(account + ".redis_db"),
 	}
 
 	return conf

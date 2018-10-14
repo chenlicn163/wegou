@@ -88,8 +88,8 @@ func GetMaterial(c *gin.Context) types.Dto {
 
 	web := c.Param("web")
 	if web == "" {
-		result.Code = types.WebFiledCode
-		result.Code = types.WebFiledMsg
+		result.Code = types.AccountParamErrorCode
+		result.Message = types.AccountParamErrorMsg
 		return result
 	}
 
@@ -159,8 +159,15 @@ func AddMaterial(c *gin.Context) types.Dto {
 
 	web := c.Param("web")
 	if web == "" {
-		result.Code = types.WebFiledCode
-		result.Code = types.WebFiledMsg
+		result.Code = types.AccountParamErrorCode
+		result.Message = types.AccountParamErrorMsg
+		return result
+	}
+
+	account, err := GetAccountCache(web)
+	if err != nil {
+		result.Code = types.AccountNotExistCode
+		result.Code = types.AccountNotExistMsg
 		return result
 	}
 
@@ -192,13 +199,6 @@ func AddMaterial(c *gin.Context) types.Dto {
 		materialType = materialTemporary
 	}
 
-	accountId, err := strconv.Atoi(c.PostForm("account_id"))
-	if err != nil {
-		result.Code = types.MaterialFileAddFailedCode
-		result.Message = types.MaterialFileAddFailedMsg
-		return result
-	}
-
 	sourceType := c.PostForm("source_type")
 	sourceTypeValues := []string{materialTypeImage, materialTypeVoice, materialTypeVideo, materialTypeThumb,
 		materialTypeNews}
@@ -221,7 +221,7 @@ func AddMaterial(c *gin.Context) types.Dto {
 		Content:      content,
 		ShowCoverPic: showCoverPic,
 		MaterialType: materialType,
-		AccountId:    accountId,
+		AccountId:    account.Id,
 		Status:       addedStatus,
 		SourceType:   sourceType,
 		CreatedAt:    createdAt,
@@ -240,8 +240,8 @@ func DelMaterial(c *gin.Context) types.Dto {
 
 	web := c.Param("web")
 	if web == "" {
-		result.Code = types.WebFiledCode
-		result.Code = types.WebFiledMsg
+		result.Code = types.AccountParamErrorCode
+		result.Message = types.AccountParamErrorMsg
 		return result
 	}
 

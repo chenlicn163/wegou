@@ -33,6 +33,13 @@ type Kafka struct {
 	MaterialGroup  string
 }
 
+//redis配置
+type Redis struct {
+	Server string
+	Auth   string
+	Db     int
+}
+
 type Dto struct {
 	Data    interface{}
 	Code    string

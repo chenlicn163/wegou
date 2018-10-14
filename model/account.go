@@ -11,7 +11,7 @@ type Account struct {
 	Oriid       string `json:"oriid"`
 	Appid       string `json:"appid"`
 	Appsecret   string `json:"appsecret"`
-	Tocken      string `json:"tocken"`
+	Token       string `json:"token"`
 	Aeskey      string `json:"aeskey"`
 	CreatedTime int64  `json:"created_time"`
 	UpdatedTime int64  `json:"updated_time"`

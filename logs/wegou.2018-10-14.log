@@ -1,0 +1,4 @@
+{"level":"info","msg":"web:test1","time":"2018-10-14 19:31:34.714"}
+{"level":"info","msg":"web:test1","time":"2018-10-14 19:31:40.574"}
+{"level":"info","msg":"web:test1","time":"2018-10-14 19:31:41.682"}
+{"level":"error","msg":"auth account:json account error:redis error:redigo: nil returned","time":"2018-10-14 19:32:21.366"}
