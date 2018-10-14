@@ -5,6 +5,8 @@ import (
 	"wegou/service/server"
 	"wegou/service/wechat"
 
+	"github.com/sirupsen/logrus"
+
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/request"
 )
@@ -61,6 +63,7 @@ func WechatServe() *core.Server {
 	if account.Token == "" {
 		account.Token = "wegou"
 	}
+	logrus.Info(account)
 	srv := core.NewServer(account.Oriid, account.Appid, account.Token, account.Aeskey, mux, nil)
 	return srv
 }
