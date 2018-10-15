@@ -22,17 +22,17 @@ func SetWechatCache(web string) {
 }
 
 //获取公众号缓存
-func GetWechatCache(web string) (account model.Account, err error) {
+func GetWechatCache(web string) (wechat model.Wechat, err error) {
 
 	jsonAccount, err := utils.Redis(web).Get("wechat")
 
 	if err != nil {
-		return account, errors.New("json account error:" + err.Error())
+		return wechat, errors.New("json account error:" + err.Error())
 	}
 	if jsonAccount != "" {
-		json.Unmarshal([]byte(jsonAccount), &account)
+		json.Unmarshal([]byte(jsonAccount), &wechat)
 	}
 
-	return account, nil
+	return wechat, nil
 
 }
