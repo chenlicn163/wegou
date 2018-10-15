@@ -10,21 +10,21 @@ import (
 
 func Routes() *gin.Engine {
 	r := gin.Default()
-	r.Use(middlewares.AuthAccount())
+	r.Use(middlewares.AuthWechat())
 	r.Any("/wechat_callback/:web", func(c *gin.Context) {
 		web := c.Param("web")
 		query := c.Request.URL.Query()
 		query.Add("web", web)
 
-		server.GetAccountCache(web)
-		account, _ := server.GetAccountCache(web)
+		server.GetWechatCache(web)
+		wechat, _ := server.GetWechatCache(web)
 
-		srv := WechatServe(account)
+		srv := WechatServe(wechat)
 		srv.ServeHTTP(c.Writer, c.Request, query)
 	})
 	wegou := r.Group("/wegou")
 
-	wegou.Use(middlewares.AuthAccount())
+	wegou.Use(middlewares.AuthWechat())
 	//素材管理
 	wegou.GET("/material/:web", controller.ListMaterialServe)
 	wegou.DELETE("/material/:web/:id", controller.DeleteMaterialServe)

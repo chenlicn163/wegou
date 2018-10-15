@@ -10,21 +10,21 @@ import (
 )
 
 //设置公众号缓存
-func SetAccountCache(web string) {
-	account := GetAccountByName(web)
-	jsonAccount, err := json.Marshal(account)
+func SetWechatCache(web string) {
+	wechat := GetWechatByCode(web)
+	jsonAccount, err := json.Marshal(wechat)
 
 	if err != nil {
-		logrus.Error("json account error:" + err.Error())
+		logrus.Error("json wechat error:" + err.Error())
 	} else {
-		utils.Redis(web).Set("account", string(jsonAccount))
+		utils.Redis(web).Set("wechat", string(jsonAccount))
 	}
 }
 
 //获取公众号缓存
-func GetAccountCache(web string) (account model.Account, err error) {
+func GetWechatCache(web string) (account model.Account, err error) {
 
-	jsonAccount, err := utils.Redis(web).Get("account")
+	jsonAccount, err := utils.Redis(web).Get("wechat")
 
 	if err != nil {
 		return account, errors.New("json account error:" + err.Error())

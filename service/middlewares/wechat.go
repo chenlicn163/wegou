@@ -6,12 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AuthAccount() gin.HandlerFunc {
+func AuthWechat() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		web := c.Param("web")
-		account, _ := server.GetAccountCache(web)
+		account, _ := server.GetWechatCache(web)
 		if account.Id == 0 {
-			server.SetAccountCache(web)
+			server.SetWechatCache(web)
 		}
 
 		c.Next()

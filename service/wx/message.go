@@ -1,4 +1,4 @@
-package wechat
+package wx
 
 import (
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"

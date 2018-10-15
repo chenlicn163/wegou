@@ -67,7 +67,7 @@ func AddFan(web string, wx string) types.Dto {
 		return result
 	}
 
-	account, err := GetAccountCache(web)
+	wechat, err := GetWechatCache(web)
 	if err != nil {
 		result.Code = types.AccountNotExistCode
 		result.Code = types.AccountNotExistMsg
@@ -78,7 +78,7 @@ func AddFan(web string, wx string) types.Dto {
 	fan := model.Fan{
 		Wx:             wx,
 		Nickname:       "",
-		AccountId:      account.Id,
+		AccountId:      wechat.Id,
 		CreatedAt:      createdAt,
 		UpdatedAt:      createdAt,
 		Status:         unCompletedStatus,

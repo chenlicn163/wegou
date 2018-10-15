@@ -37,9 +37,9 @@ var (
 	pool *redis.Pool
 )
 
-func Redis(account string) (r *cache.Redis) {
-	redisConfig := config.GetRedisConfig(account)
+func Redis(web string) (r *cache.Redis) {
+	redisConfig := config.GetRedisConfig(web)
 	pool = newPool(redisConfig.Server, redisConfig.Auth, redisConfig.Db)
-	r = &cache.Redis{Conn: pool.Get(), Prefix: account}
+	r = &cache.Redis{Conn: pool.Get(), Prefix: web}
 	return r
 }
