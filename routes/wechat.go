@@ -5,8 +5,6 @@ import (
 	"wegou/service/server"
 	"wegou/service/wx"
 
-	"github.com/sirupsen/logrus"
-
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/request"
 )
@@ -60,7 +58,7 @@ func WechatServe(wechat model.Wechat) *core.Server {
 	// 创建 Server, 设置正确的参数.
 	// 通常一个 Server 对应一个公众号, 当然一个 Server 也可以对应多个公众号, 这个时候 oriId 和 appId 都应该设置为空值!
 	//srv := core.NewServer("{oriId}", "{appId}", " {token}", "{base64AESKey}", mux, nil)
-	logrus.Info(wechat)
+	//logrus.Info(wechat)
 	srv := core.NewServer(wechat.Oriid, wechat.Appid, wechat.Token, wechat.Aeskey, mux, nil)
 	return srv
 }
