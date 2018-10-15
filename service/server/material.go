@@ -164,7 +164,7 @@ func AddMaterial(c *gin.Context) types.Dto {
 		return result
 	}
 
-	account, err := GetAccountCache(web)
+	wechat, err := GetWechatCache(web)
 	if err != nil {
 		result.Code = types.AccountNotExistCode
 		result.Code = types.AccountNotExistMsg
@@ -221,7 +221,7 @@ func AddMaterial(c *gin.Context) types.Dto {
 		Content:      content,
 		ShowCoverPic: showCoverPic,
 		MaterialType: materialType,
-		AccountId:    account.Id,
+		AccountId:    wechat.Id,
 		Status:       addedStatus,
 		SourceType:   sourceType,
 		CreatedAt:    createdAt,
