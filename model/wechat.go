@@ -18,6 +18,11 @@ type Wechat struct {
 	ServiceType int    `json:"service_type"`
 	Status      int    `json:"status"`
 	AccountId   int    `json:"account_id"`
+	DbHost      string `json:"db_host"`
+	DbName      string `json:"db_name"`
+	DbPort      int    `json:"db_port"`
+	DbUser      string `json:"db_user"`
+	DbPassword  string `json:"db_password"`
 }
 
 //获取公众号

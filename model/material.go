@@ -35,7 +35,7 @@ func (material *Material) GetMaterial(web string, page int, MaterialType string,
 	pageSize := types.MaterialPageSize
 	offset := pageSize * (page - 1)
 
-	conn := utils.Open(web)
+	conn := utils.OpenWechat(web)
 	defer conn.Close()
 	if conn == nil {
 		return nil
@@ -72,7 +72,7 @@ func (material *Material) GetMaterial(web string, page int, MaterialType string,
 
 func (material *Material) GetMaterialCount(web string, MaterialType string, sourceType string, status int) int {
 
-	conn := utils.Open(web)
+	conn := utils.OpenWechat(web)
 	defer conn.Close()
 	if conn == nil {
 		return 0
@@ -108,7 +108,7 @@ func (material *Material) GetMaterialCount(web string, MaterialType string, sour
 
 //添加素材
 func (material *Material) AddMaterial(web string) bool {
-	conn := utils.Open(web)
+	conn := utils.OpenWechat(web)
 	defer conn.Close()
 	conn.Model(&Material{}).Create(material)
 	return true
@@ -116,7 +116,7 @@ func (material *Material) AddMaterial(web string) bool {
 
 //更新素材
 func (material *Material) UpdateMaterial(web string) bool {
-	conn := utils.Open(web)
+	conn := utils.OpenWechat(web)
 	defer conn.Close()
 	conn.Model(&Material{}).Where("id=?", material.Id).Updates(material)
 	return true
@@ -124,7 +124,7 @@ func (material *Material) UpdateMaterial(web string) bool {
 
 //删除素材
 func (material *Material) DelMaterial(web string) bool {
-	conn := utils.Open(web)
+	conn := utils.OpenWechat(web)
 	defer conn.Close()
 	conn.Model(&Material{}).Where("id=?", material.Id).Delete(Material{})
 	return true
