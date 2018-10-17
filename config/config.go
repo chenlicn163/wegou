@@ -70,8 +70,8 @@ func GetDbConfig(account string) types.Db {
 func GetRedisConfig() types.Redis {
 	conf := types.Redis{
 		Server: viper.GetString("redis.server"),
-		Auth:   viper.GetString("redis..auth"),
-		Db:     viper.GetInt("redis..db"),
+		Auth:   viper.GetString("redis.auth"),
+		Db:     viper.GetInt("redis.db"),
 	}
 
 	return conf
