@@ -6,6 +6,9 @@ import (
 	"os/signal"
 	"wegou/types"
 
+	"github.com/tidwall/gjson"
+
+	"github.com/Shopify/sarama"
 	cluster "github.com/bsm/sarama-cluster"
 )
 
@@ -47,4 +50,17 @@ func CustomerConsumer(kafkaConfig types.Kafka) {
 			return
 		}
 	}
+}
+
+func customer(msg *sarama.ConsumerMessage) {
+	message := string(msg.Value)
+	topic := gjson.Get(message, "kafka.topic").String()
+	switch topic {
+	case "customer-add":
+		customerAdd(message)
+	}
+}
+
+func customerAdd(message string) {
+
 }
