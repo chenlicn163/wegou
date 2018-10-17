@@ -8,20 +8,25 @@ type Web struct {
 
 //微信配置
 type Wechat struct {
-	OriId     string
-	AppId     string
-	Token     string
-	AppSecret string
-	AesKey    string
+	Oriid      string `json:"oriid"`
+	Appid      string `json:"appid"`
+	Appsecret  string `json:"appsecret"`
+	Token      string `json:"token"`
+	Aeskey     string `json:"aeskey"`
+	DbHost     string `json:"db_host"`
+	DbName     string `json:"db_name"`
+	DbPort     string `json:"db_port"`
+	DbUser     string `json:"db_user"`
+	DbPassword string `json:"db_password"`
 }
 
 //数据库配置
 type Db struct {
-	Host     string
-	Port     string
-	User     string
-	Password string
-	DbName   string
+	DbHost     string
+	DbPort     string
+	DbUser     string
+	DbPassword string
+	DbName     string
 }
 
 //kafk配置

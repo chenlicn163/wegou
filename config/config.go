@@ -57,21 +57,21 @@ func GetKafkaConfig() types.Kafka {
 func GetDbConfig(account string) types.Db {
 	//log.Println(dbConfig)
 	conf := types.Db{
-		Host:     viper.GetString(account + ".host"),
-		Port:     viper.GetString(account + ".port"),
-		User:     viper.GetString(account + ".user"),
-		Password: viper.GetString(account + ".password"),
-		DbName:   viper.GetString(account + ".db_name"),
+		DbHost:     viper.GetString(account + ".host"),
+		DbPort:     viper.GetString(account + ".port"),
+		DbUser:     viper.GetString(account + ".user"),
+		DbPassword: viper.GetString(account + ".password"),
+		DbName:     viper.GetString(account + ".db_name"),
 	}
 
 	return conf
 }
 
-func GetRedisConfig(account string) types.Redis {
+func GetRedisConfig() types.Redis {
 	conf := types.Redis{
-		Server: viper.GetString(account + ".redis_server"),
-		Auth:   viper.GetString(account + ".redis_auth"),
-		Db:     viper.GetInt(account + ".redis_db"),
+		Server: viper.GetString("redis.server"),
+		Auth:   viper.GetString("redis..auth"),
+		Db:     viper.GetInt("redis..db"),
 	}
 
 	return conf

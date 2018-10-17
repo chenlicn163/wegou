@@ -19,7 +19,7 @@ type Wechat struct {
 	Status      int    `json:"status"`
 	DbHost      string `json:"db_host"`
 	DbName      string `json:"db_name"`
-	DbPort      int    `json:"db_port"`
+	DbPort      string `json:"db_port"`
 	DbUser      string `json:"db_user"`
 	DbPassword  string `json:"db_password"`
 	AuthStatus  int    `json:"auth_status"`

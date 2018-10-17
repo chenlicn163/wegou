@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"wegou/model"
 	"wegou/service/server"
 	"wegou/service/wx"
 
@@ -9,7 +8,7 @@ import (
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/request"
 )
 
-func WechatServe(wechat model.Wechat) *core.Server {
+func WechatServe(web string) *core.Server {
 
 	mux := core.NewServeMux() // 创建 core.Handler, 也可以用自己实现的 core.Handler
 
@@ -49,11 +48,12 @@ func WechatServe(wechat model.Wechat) *core.Server {
 		})
 		mux.EventHandleFunc(request.EventTypeSubscribe, func(ctx *core.Context) { // 设置具体类型的事件处理 Handler
 			// TODO: 事件处理逻辑
-			web := ctx.QueryParams.Get("web")
+
 			server.AddFan(web, ctx.MixedMsg.MsgHeader.FromUserName)
 			wx.Text(web, ctx, "欢迎关注")
 		})
 	}
+	wechat, _ := server.GetWechatCache(web)
 
 	// 创建 Server, 设置正确的参数.
 	// 通常一个 Server 对应一个公众号, 当然一个 Server 也可以对应多个公众号, 这个时候 oriId 和 appId 都应该设置为空值!

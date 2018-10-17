@@ -3,7 +3,6 @@ package routes
 import (
 	"wegou/controller"
 	"wegou/service/middlewares"
-	"wegou/service/server"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,14 +12,9 @@ func Routes() *gin.Engine {
 	r.Use(middlewares.AuthWechat())
 	r.Any("/wechat_callback/:web", func(c *gin.Context) {
 		web := c.Param("web")
-		query := c.Request.URL.Query()
-		query.Add("web", web)
 
-		server.GetWechatCache(web)
-		wechat, _ := server.GetWechatCache(web)
-
-		srv := WechatServe(wechat)
-		srv.ServeHTTP(c.Writer, c.Request, query)
+		srv := WechatServe(web)
+		srv.ServeHTTP(c.Writer, c.Request, nil)
 	})
 	wegou := r.Group("/wegou")
 

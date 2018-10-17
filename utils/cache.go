@@ -38,7 +38,7 @@ var (
 )
 
 func Redis(web string) (r *cache.Redis) {
-	redisConfig := config.GetRedisConfig(web)
+	redisConfig := config.GetRedisConfig()
 	pool = newPool(redisConfig.Server, redisConfig.Auth, redisConfig.Db)
 	r = &cache.Redis{Conn: pool.Get(), Prefix: web}
 	return r
