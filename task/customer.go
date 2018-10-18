@@ -1,15 +1,15 @@
 package task
 
 import (
-	"fmt"
 	"os"
 	"os/signal"
+	"wegou/service/wx"
 	"wegou/types"
 
 	"github.com/tidwall/gjson"
 
 	"github.com/Shopify/sarama"
-	cluster "github.com/bsm/sarama-cluster"
+	"github.com/bsm/sarama-cluster"
 )
 
 func CustomerConsumer(kafkaConfig types.Kafka) {
@@ -42,7 +42,9 @@ func CustomerConsumer(kafkaConfig types.Kafka) {
 			// start a separate goroutine to consume messages
 			go func(pc cluster.PartitionConsumer) {
 				for msg := range pc.Messages() {
-					fmt.Fprintf(os.Stdout, "%s/%d/%d\t%s\t%s\n", msg.Topic, msg.Partition, msg.Offset, msg.Key, msg.Value)
+					/*fmt.Fprintf(os.Stdout, "%s/%d/%d\t%s\t%s\n", msg.Topic, msg.Partition, msg.Offset, msg.Key, msg.Value)
+					 */
+					customer(msg)
 					consumer.MarkOffset(msg, "") // mark message as processed
 				}
 			}(part)
@@ -62,5 +64,8 @@ func customer(msg *sarama.ConsumerMessage) {
 }
 
 func customerAdd(message string) {
-
+	web := gjson.Get(message, "web").String()
+	openid := gjson.Get(message, "openid").String()
+	fan := wx.GetCustomer(web, openid).Get()
+	fan.AddFan(web)
 }

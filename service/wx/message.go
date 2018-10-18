@@ -5,28 +5,31 @@ import (
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/response"
 )
 
-//文本消息
-func Text(web string, ctx *core.Context, content string) {
-	text := response.NewText(ctx.MixedMsg.MsgHeader.FromUserName, ctx.MixedMsg.MsgHeader.ToUserName,
-		ctx.MixedMsg.MsgHeader.CreateTime, content)
-	sendMsg(text, ctx)
-}
-
-//图片消息
-func Image(web string, ctx *core.Context, mediaId string) {
-	image := response.NewImage(ctx.MixedMsg.MsgHeader.FromUserName, ctx.MixedMsg.MsgHeader.ToUserName,
-		ctx.MixedMsg.MsgHeader.CreateTime, mediaId)
-	image.Image.MediaId = mediaId
-	sendMsg(image, ctx)
+type Message struct {
+	Ctx *core.Context
 }
 
 //发送消息
-func sendMsg(msg interface{}, ctx *core.Context) {
-	aesKey := string(ctx.AESKey)
+func (msg *Message) sendMsg(content interface{}) {
+	aesKey := string(msg.Ctx.AESKey)
 	if aesKey != "" {
-		ctx.AESResponse(msg, 0, "", nil)
+		msg.Ctx.AESResponse(msg, 0, "", nil)
 	} else {
-		ctx.RawResponse(msg)
+		msg.Ctx.RawResponse(msg)
 	}
+}
 
+//文本消息
+func (msg Message) Text(web string, content string) {
+	text := response.NewText(msg.Ctx.MixedMsg.MsgHeader.FromUserName, msg.Ctx.MixedMsg.MsgHeader.ToUserName,
+		msg.Ctx.MixedMsg.MsgHeader.CreateTime, content)
+	msg.sendMsg(text)
+}
+
+//图片消息
+func (msg *Message) Image(web string, mediaId string) {
+	image := response.NewImage(msg.Ctx.MixedMsg.MsgHeader.FromUserName, msg.Ctx.MixedMsg.MsgHeader.ToUserName,
+		msg.Ctx.MixedMsg.MsgHeader.CreateTime, mediaId)
+	image.Image.MediaId = mediaId
+	msg.sendMsg(image)
 }

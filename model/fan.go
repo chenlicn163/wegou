@@ -19,11 +19,11 @@ type Fan struct {
 	City           string `json:"city"`
 	Province       string `json:"province"`
 	Country        string `json:"country"`
-	Headimgurl     string `json:"headimgurl"`
+	HeadImageURL   string `json:"headimageurl"`
 	SubscribeTime  int64  `json:"subscribe_time"`
-	Unionid        string `json:"unionid"`
-	Groupid        int    `json:"groupid"`
-	TagidList      string `json:"tagid_list"`
+	UnionId        string `json:"unionid"`
+	GroupId        int64  `json:"groupid"`
+	TagidList      []int  `json:"tagid_list"`
 	SubscribeScene string `json:"subscribe_scene"`
 }
 

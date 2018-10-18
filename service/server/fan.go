@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"time"
 	"wegou/model"
+	"wegou/task"
 	"wegou/types"
 
 	"github.com/gin-gonic/gin"
@@ -88,13 +89,16 @@ func AddFan(web string, wx string) types.Dto {
 		City:           "",
 		Province:       "",
 		Country:        "",
-		Headimgurl:     "",
+		HeadImageURL:   "",
 		SubscribeTime:  0,
-		Unionid:        "",
-		Groupid:        0,
-		TagidList:      "",
+		UnionId:        "",
+		GroupId:        0,
+		TagidList:      []int{},
 		SubscribeScene: "",
 	}
+	fan.AddFan(web)
+
+	task.AsyncProducer("", "")
 
 	result.Code = types.WechatSuccessCode
 	result.Message = types.WechatSuccessMsg

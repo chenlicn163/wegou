@@ -35,22 +35,21 @@ func WechatServe(web string) *core.Server {
 
 		mux.MsgHandleFunc(request.MsgTypeVoice, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			wx.Text(ctx.QueryParams.Get("web"), ctx, "您输入声音")
+			wx.GetMessage(ctx).Text(ctx.QueryParams.Get("web"), "您输入声音")
 		})
 
 		mux.MsgHandleFunc(request.MsgTypeText, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			wx.Text(ctx.QueryParams.Get("web"), ctx, "您输入了文本")
+			wx.GetMessage(ctx).Text(ctx.QueryParams.Get("web"), "您输入了文本")
 		})
 		mux.MsgHandleFunc(request.MsgTypeVoice, func(ctx *core.Context) { // 设置具体类型的消息处理 Handler
 			// TODO: 消息处理逻辑
-			wx.Image(ctx.QueryParams.Get("web"), ctx, "_c3Pe6DMtXU-zedUeoeuZgG_RuXQEgwAjIAfTyCzSd8")
+			wx.GetMessage(ctx).Image(ctx.QueryParams.Get("web"), "_c3Pe6DMtXU-zedUeoeuZgG_RuXQEgwAjIAfTyCzSd8")
 		})
 		mux.EventHandleFunc(request.EventTypeSubscribe, func(ctx *core.Context) { // 设置具体类型的事件处理 Handler
 			// TODO: 事件处理逻辑
-
 			server.AddFan(web, ctx.MixedMsg.MsgHeader.FromUserName)
-			wx.Text(web, ctx, "欢迎关注")
+			wx.GetMessage(ctx).Text(web, "欢迎关注")
 		})
 	}
 	wechat, _ := server.GetWechatCache(web)

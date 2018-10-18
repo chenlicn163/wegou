@@ -54,7 +54,7 @@ func ListMaterialServe(c *gin.Context) {
 	materialType := r.Form.Get("type")
 	page := r.Form.Get("page")
 	if materialType != "" {
-		rslt := server.BatchFetch(clt, materialType, page)
+		rslt := server.BatchFetchMaterial(clt, materialType, page)
 		fmt.Println(rslt)
 		//materialCount := GetMaterialCount(clt)
 	}*/

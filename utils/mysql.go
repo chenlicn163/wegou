@@ -32,11 +32,14 @@ func Open(account string) (db *gorm.DB) {
 }
 
 func OpenWechat(web string) (db *gorm.DB) {
-	conf, _ := GetWechatConfig(web)
-	logrus.Info(conf)
+	conf, err := GetWechatConfig(web)
+	if err != nil {
+		logrus.Error(err.Error())
+	}
+
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True",
 		conf.DbUser, conf.DbPassword, conf.DbHost, conf.DbPort, conf.DbName)
-	db, err := gorm.Open("mysql", dsn)
+	db, err = gorm.Open("mysql", dsn)
 	if err != nil {
 		fmt.Println("connect to db failed,err:%+v", dsn)
 	}
