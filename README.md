@@ -1,6 +1,8 @@
 # wegou
 
 
+目录结构
+
 ```
 ├── README.md       说明文件
 ├── config          读取配置
@@ -16,7 +18,7 @@
 │   └── wx          微信逻辑处理
 ├── task            任务
 ├── types           常量
-├── upload
+├── upload          上传文件目录
 ├── utils           工具
 └── vendor          第三方包
 ```
