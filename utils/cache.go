@@ -1,15 +1,11 @@
 package utils
 
 import (
-	"encoding/json"
-	"errors"
 	"time"
 	"wegou/config"
-	"wegou/types"
 	"wegou/utils/cache"
 
 	"github.com/gomodule/redigo/redis"
-	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -52,17 +48,4 @@ func GetCache(web string) (r cache.Cache) {
 	}
 
 	return r
-}
-
-//获取公众号缓存
-func GetWechatConfig(web string) (wechat types.Db) {
-	jsonAccount, err := GetCache(web).Get("wechat")
-	if err != nil {
-		logrus.Error(errors.New("json account error:" + err.Error()))
-		return wechat
-	}
-	if jsonAccount != "" {
-		json.Unmarshal([]byte(jsonAccount), &wechat)
-	}
-	return wechat
 }
