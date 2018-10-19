@@ -1,21 +1,6 @@
-package config
+package types
 
 const (
-	MaterialPageSize = 20
-	FanPageSize      = 20
-	AccountPageSize  = 20
-
-	WechatSuccessCode = "0"
-	WechatSuccessMsg  = "success"
-
-	//web管理
-	AccountParamErrorCode = "10001"
-	AccountParamErrorMsg  = "公众号参数错误"
-	AccountNotExistCode   = "10002"
-	AccountNotExistMsg    = "公众号不存在"
-	AccountNotConfigCode  = "10003"
-	AccountNotConfigMsg   = "公众号配置不正确"
-
 	//永久资源管理
 	MaterialDelFailedCode           = "20001"
 	MaterialDelFailedMsg            = "删除永久素材失败"
@@ -33,8 +18,4 @@ const (
 	MaterialSourceTypeAddFailedMsg  = "新增加永久素材失败,资源类型不正确"
 	MaterialIdDeleteFailedCode      = "20008"
 	MaterialIdDeleteFailedMsg       = "删永久素材失败，资源ID不正确"
-
-	//粉丝管理
-	FanAddFailedCode = "20101"
-	FanAddFailedMsg  = "粉丝添加失败"
 )

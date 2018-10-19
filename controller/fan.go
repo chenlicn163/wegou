@@ -2,8 +2,8 @@ package controller
 
 import (
 	"net/http"
-	"wegou/config"
 	"wegou/service/server"
+	"wegou/types"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +15,7 @@ func (fanController FanController) ListFans(c *gin.Context) {
 	result := server.FanDto{}
 	result.GetFan(c)
 	var data map[string]interface{}
-	if result.Code == config.WechatSuccessCode {
+	if result.Code == types.WechatSuccessCode {
 		rslt := result.Data.(map[string]interface{})
 		page := rslt["page"].(map[string]int)
 
