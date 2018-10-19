@@ -14,8 +14,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type MaterialController struct{}
+
 //查询永久素材
-func ListMaterialServe(c *gin.Context) {
+func (materialController *MaterialController) ListMaterial(c *gin.Context) {
 	result := server.MaterialDto{}
 	result.GetMaterial(c)
 
@@ -62,7 +64,7 @@ func ListMaterialServe(c *gin.Context) {
 }
 
 //删除永久素材
-func DeleteMaterialServe(c *gin.Context) {
+func (materialController *MaterialController) DeleteMaterial(c *gin.Context) {
 	result := server.MaterialDto{}
 	result.DelMaterial(c)
 
@@ -73,7 +75,7 @@ func DeleteMaterialServe(c *gin.Context) {
 }
 
 //添加永久素材
-func AddMaterialServe(c *gin.Context) {
+func (materialController *MaterialController) AddMaterial(c *gin.Context) {
 	result := server.MaterialDto{}
 	result.AddMaterial(c)
 
@@ -84,7 +86,7 @@ func AddMaterialServe(c *gin.Context) {
 }
 
 //test 上传文件测试
-func AddFileServe(c *gin.Context) {
+func (materialController *MaterialController) AddFile(c *gin.Context) {
 	buf := new(bytes.Buffer)
 	writer := multipart.NewWriter(buf)
 	formFile, err := writer.CreateFormFile("file", "test.jpg")

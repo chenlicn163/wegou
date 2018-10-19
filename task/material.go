@@ -9,7 +9,9 @@ import (
 	cluster "github.com/bsm/sarama-cluster"
 )
 
-func MaterialConsumer(kafkaConfig types.Kafka) {
+type MaterialConsumer struct{}
+
+func (materialConsumer *MaterialConsumer) Consumer(kafkaConfig types.Kafka) {
 
 	// init (custom) config, set mode to ConsumerModePartitions
 	config := cluster.NewConfig()

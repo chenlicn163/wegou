@@ -103,7 +103,7 @@ func (result *FanDto) AddFan(web string, wx string) {
 	}
 	fan.AddFan(web)
 
-	task.AsyncProducer("", "")
+	(&task.Task{Topics: ""}).AsyncProducer("")
 
 	result.Code = types.WechatSuccessCode
 	result.Message = types.WechatSuccessMsg

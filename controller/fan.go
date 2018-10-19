@@ -8,8 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type FanController struct{}
+
 //查询粉丝
-func ListFansServe(c *gin.Context) {
+func (fanController FanController) ListFans(c *gin.Context) {
 	result := server.FanDto{}
 	result.GetFan(c)
 	var data map[string]interface{}

@@ -55,9 +55,3 @@ type Tools struct {
 	Upload   string
 	Database string
 }
-
-type Dto struct {
-	Data    interface{}
-	Code    string
-	Message string
-}

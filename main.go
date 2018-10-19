@@ -14,8 +14,9 @@ func main() {
 
 	//启动服务
 	kafkaConfig := config.GetKafkaConfig()
-	go task.CustomerConsumer(kafkaConfig)
-	go task.MaterialConsumer(kafkaConfig)
+
+	go (&task.CustomerConCumer{}).Consumer(kafkaConfig)
+	go (&task.MaterialConsumer{}).Consumer(kafkaConfig)
 
 	r := routes.Routes()
 	webConfig := config.GetWebConfig()

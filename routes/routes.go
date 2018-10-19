@@ -20,15 +20,16 @@ func Routes() *gin.Engine {
 
 	wegou.Use(middlewares.AuthWechat())
 	//素材管理
-	wegou.GET("/material/:web", controller.ListMaterialServe)
-	wegou.DELETE("/material/:web/:id", controller.DeleteMaterialServe)
-	wegou.PUT("/material/:web", controller.AddMaterialServe)
+	materialController := controller.MaterialController{}
+	wegou.GET("/material/:web", materialController.ListMaterial)
+	wegou.DELETE("/material/:web/:id", materialController.DeleteMaterial)
+	wegou.PUT("/material/:web", materialController.AddMaterial)
 	//粉丝管理
-	wegou.GET("/fan/:web", controller.ListFansServe)
+	fanController := controller.FanController{}
+	wegou.GET("/fan/:web", fanController.ListFans)
 
 	//前台
-
-	r.POST("/test", controller.AddFileServe)
+	r.POST("/test", materialController.AddFile)
 
 	return r
 }

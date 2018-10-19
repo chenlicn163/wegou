@@ -10,7 +10,9 @@ import (
 	"github.com/golang/glog"
 )
 
-func AsyncProducer(topics string, value string) {
+type Task struct{ Topics string }
+
+func (task *Task) AsyncProducer(value string) {
 	kafkaConfig := config.GetKafkaConfig()
 	config := sarama.NewConfig()
 	config.Producer.Return.Successes = true //必须有这个选项
@@ -38,7 +40,7 @@ func AsyncProducer(topics string, value string) {
 
 	fmt.Fprintln(os.Stdout, value)
 	msg := &sarama.ProducerMessage{
-		Topic: topics,
+		Topic: task.Topics,
 		Value: sarama.ByteEncoder(value),
 	}
 	p.Input() <- msg
