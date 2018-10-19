@@ -3,7 +3,7 @@ package wx
 import (
 	"fmt"
 	"strconv"
-	"wegou/types"
+	"wegou/config"
 
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 	"gopkg.in/chanxuehong/wechat.v2/mp/material"
@@ -27,7 +27,7 @@ func (wgMaterial *WgMaterial) FetchMaterialCount(clt *core.Client) *material.Mat
 
 //批量获取永久素材
 func (wgMaterial *WgMaterial) BatchFetchMaterial(clt *core.Client, materialType string, pageStr string) *material.BatchGetResult {
-	size := types.MaterialPageSize
+	size := config.MaterialPageSize
 	page, err := strconv.Atoi(pageStr)
 	if err != nil {
 		page = 1

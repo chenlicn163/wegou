@@ -3,8 +3,8 @@ package task
 import (
 	"os"
 	"os/signal"
+	"wegou/config"
 	"wegou/service/wx"
-	"wegou/types"
 
 	"github.com/tidwall/gjson"
 
@@ -14,7 +14,7 @@ import (
 
 type CustomerConCumer struct{}
 
-func (customerConCumer *CustomerConCumer) Consumer(kafkaConfig types.Kafka) {
+func (customerConCumer *CustomerConCumer) Consumer(kafkaConfig config.Kafka) {
 
 	// init (custom) config, set mode to ConsumerModePartitions
 	config := cluster.NewConfig()

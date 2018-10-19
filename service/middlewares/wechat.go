@@ -6,7 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AuthWechat() gin.HandlerFunc {
+type WechatAuth struct {
+}
+
+func (wechatAuth *WechatAuth) Do() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		web := c.Param("web")
 		wechatCache := server.WechatCache{Web: web}

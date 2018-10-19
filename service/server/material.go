@@ -3,12 +3,11 @@ package server
 import (
 	"strconv"
 	"time"
+	"wegou/config"
 	"wegou/model"
 	"wegou/utils"
 
 	"github.com/gin-gonic/gin"
-
-	"wegou/types"
 )
 
 const (
@@ -40,8 +39,8 @@ func (result *MaterialDto) GetMaterial(c *gin.Context) {
 
 	web := c.Param("web")
 	if web == "" {
-		result.Code = types.AccountParamErrorCode
-		result.Message = types.AccountParamErrorMsg
+		result.Code = config.AccountParamErrorCode
+		result.Message = config.AccountParamErrorMsg
 		return
 	}
 
@@ -54,16 +53,16 @@ func (result *MaterialDto) GetMaterial(c *gin.Context) {
 	MaterialType := c.Query("material")
 	MaterialTypeValues := []string{strconv.Itoa(materialTemporary), strconv.Itoa(materialForever)}
 	if exists, _ := utils.InArray(MaterialType, MaterialTypeValues); MaterialType != "" && !exists {
-		result.Code = types.MaterialTypeErrorCode
-		result.Message = types.MaterialTypeErrorMsg
+		result.Code = config.MaterialTypeErrorCode
+		result.Message = config.MaterialTypeErrorMsg
 		return
 	}
 
 	statusStr := c.Query("status")
 	statusValues := []string{strconv.Itoa(availableStatus), strconv.Itoa(addedStatus), strconv.Itoa(deletedStatus)}
 	if exists, _ := utils.InArray(statusStr, statusValues); statusStr != "" && !exists {
-		result.Code = types.SourceStatusErrorCode
-		result.Message = types.SourceStatusErrorMsg
+		result.Code = config.SourceStatusErrorCode
+		result.Message = config.SourceStatusErrorMsg
 		return
 	}
 	status, err := strconv.Atoi(statusStr)
@@ -75,14 +74,14 @@ func (result *MaterialDto) GetMaterial(c *gin.Context) {
 	sourceTypeValues := []string{materialTypeImage, materialTypeVoice, materialTypeVideo, materialTypeThumb,
 		materialTypeNews}
 	if exists, _ := utils.InArray(sourceType, sourceTypeValues); sourceType != "" && !exists {
-		result.Code = types.SourceTypeErrorCode
-		result.Message = types.SourceTypeErrorMsg
+		result.Code = config.SourceTypeErrorCode
+		result.Message = config.SourceTypeErrorMsg
 		return
 	}
 
 	mat := model.Material{}
 	pageCount := mat.GetMaterialCount(web, MaterialType, sourceType, status)
-	pageSize := types.MaterialPageSize
+	pageSize := config.MaterialPageSize
 	var pageNum int
 	if pageCount%pageSize == 0 {
 		pageNum = pageCount / pageSize
@@ -91,8 +90,8 @@ func (result *MaterialDto) GetMaterial(c *gin.Context) {
 	}
 	materials := mat.GetMaterial(web, page, MaterialType, sourceType, status)
 
-	result.Code = types.WechatSuccessCode
-	result.Message = types.WechatSuccessMsg
+	result.Code = config.WechatSuccessCode
+	result.Message = config.WechatSuccessMsg
 	result.Data = map[string]interface{}{
 		"materials": materials,
 		"page": map[string]int{
@@ -109,22 +108,22 @@ func (result *MaterialDto) AddMaterial(c *gin.Context) {
 
 	web := c.Param("web")
 	if web == "" {
-		result.Code = types.AccountParamErrorCode
-		result.Message = types.AccountParamErrorMsg
+		result.Code = config.AccountParamErrorCode
+		result.Message = config.AccountParamErrorMsg
 		return
 	}
 
 	wechat, err := (&WechatCache{Web: web}).Get()
 	if err != nil {
-		result.Code = types.AccountNotExistCode
-		result.Code = types.AccountNotExistMsg
+		result.Code = config.AccountNotExistCode
+		result.Code = config.AccountNotExistMsg
 		return
 	}
 
 	title := c.PostForm("title")
 	if title == "" {
-		result.Code = types.MaterialTitleAddFailedCode
-		result.Message = types.MaterialTitleAddFailedMsg
+		result.Code = config.MaterialTitleAddFailedCode
+		result.Message = config.MaterialTitleAddFailedMsg
 		return
 	}
 
@@ -134,8 +133,8 @@ func (result *MaterialDto) AddMaterial(c *gin.Context) {
 		strconv.Itoa(time.Now().Day())
 	fileName, err := utils.GetUpload(uploadPath).UploadFile(c.Request)
 	if err != nil {
-		result.Code = types.MaterialFileAddFailedCode
-		result.Message = types.MaterialFileAddFailedMsg
+		result.Code = config.MaterialFileAddFailedCode
+		result.Message = config.MaterialFileAddFailedMsg
 		return
 	}
 
@@ -153,8 +152,8 @@ func (result *MaterialDto) AddMaterial(c *gin.Context) {
 	sourceTypeValues := []string{materialTypeImage, materialTypeVoice, materialTypeVideo, materialTypeThumb,
 		materialTypeNews}
 	if exists, _ := utils.InArray(sourceType, sourceTypeValues); sourceType != "" && !exists {
-		result.Code = types.MaterialSourceTypeAddFailedCode
-		result.Message = types.MaterialSourceTypeAddFailedMsg
+		result.Code = config.MaterialSourceTypeAddFailedCode
+		result.Message = config.MaterialSourceTypeAddFailedMsg
 		return
 	}
 
@@ -179,8 +178,8 @@ func (result *MaterialDto) AddMaterial(c *gin.Context) {
 	}
 
 	mat.AddMaterial(web)
-	result.Code = types.WechatSuccessCode
-	result.Message = types.WechatSuccessMsg
+	result.Code = config.WechatSuccessCode
+	result.Message = config.WechatSuccessMsg
 	return
 }
 
@@ -189,16 +188,16 @@ func (result *MaterialDto) DelMaterial(c *gin.Context) {
 
 	web := c.Param("web")
 	if web == "" {
-		result.Code = types.AccountParamErrorCode
-		result.Message = types.AccountParamErrorMsg
+		result.Code = config.AccountParamErrorCode
+		result.Message = config.AccountParamErrorMsg
 		return
 	}
 
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		result.Code = types.MaterialIdDeleteFailedCode
-		result.Message = types.MaterialIdDeleteFailedMsg
+		result.Code = config.MaterialIdDeleteFailedCode
+		result.Message = config.MaterialIdDeleteFailedMsg
 		return
 	}
 	mat := model.Material{}
@@ -208,7 +207,7 @@ func (result *MaterialDto) DelMaterial(c *gin.Context) {
 	mat.UpdateMaterial(web)
 
 	//触发任务，删除微信服务器
-	result.Code = types.WechatSuccessCode
-	result.Message = types.WechatSuccessMsg
+	result.Code = config.WechatSuccessCode
+	result.Message = config.WechatSuccessMsg
 	return
 }

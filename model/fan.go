@@ -1,7 +1,7 @@
 package model
 
 import (
-	"wegou/types"
+	"wegou/config"
 	"wegou/utils"
 )
 
@@ -28,7 +28,7 @@ type Fan struct {
 }
 
 func (fan *Fan) GetFan(web string, page int) []Fan {
-	pageSize := types.FanPageSize
+	pageSize := config.FanPageSize
 	offset := pageSize * (page - 1)
 
 	conn := utils.GetDb(web).Open()

@@ -3,9 +3,9 @@ package server
 import (
 	"strconv"
 	"time"
+	"wegou/config"
 	"wegou/model"
 	"wegou/task"
-	"wegou/types"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,8 +26,8 @@ func (result *FanDto) GetFan(c *gin.Context) {
 
 	web := c.Param("web")
 	if web == "" {
-		result.Code = types.AccountParamErrorCode
-		result.Message = types.AccountParamErrorMsg
+		result.Code = config.AccountParamErrorCode
+		result.Message = config.AccountParamErrorMsg
 		return
 	}
 
@@ -42,7 +42,7 @@ func (result *FanDto) GetFan(c *gin.Context) {
 	fans := fan.GetFan(web, page)
 
 	pageCount := fan.GetFanCount(web)
-	pageSize := types.FanPageSize
+	pageSize := config.FanPageSize
 
 	var pageNum int
 	if pageCount%pageSize == 0 {
@@ -51,8 +51,8 @@ func (result *FanDto) GetFan(c *gin.Context) {
 		pageNum = pageCount/pageSize + 1
 	}
 
-	result.Code = types.WechatSuccessCode
-	result.Message = types.WechatSuccessMsg
+	result.Code = config.WechatSuccessCode
+	result.Message = config.WechatSuccessMsg
 	result.Data = map[string]interface{}{
 		"materials": fans,
 		"page": map[string]int{
@@ -68,15 +68,15 @@ func (result *FanDto) GetFan(c *gin.Context) {
 func (result *FanDto) AddFan(web string, wx string) {
 
 	if web == "" {
-		result.Code = types.AccountParamErrorCode
-		result.Code = types.AccountParamErrorMsg
+		result.Code = config.AccountParamErrorCode
+		result.Code = config.AccountParamErrorMsg
 		return
 	}
 
 	wechat, err := (&WechatCache{Web: web}).Get()
 	if err != nil {
-		result.Code = types.AccountNotExistCode
-		result.Code = types.AccountNotExistMsg
+		result.Code = config.AccountNotExistCode
+		result.Code = config.AccountNotExistMsg
 		return
 	}
 
@@ -105,8 +105,8 @@ func (result *FanDto) AddFan(web string, wx string) {
 
 	(&task.Task{Topics: ""}).AsyncProducer("")
 
-	result.Code = types.WechatSuccessCode
-	result.Message = types.WechatSuccessMsg
+	result.Code = config.WechatSuccessCode
+	result.Message = config.WechatSuccessMsg
 	result.Data = fan
 	return
 }

@@ -9,7 +9,8 @@ import (
 
 func Routes() *gin.Engine {
 	r := gin.Default()
-	r.Use(middlewares.AuthWechat())
+	wechatAuth := middlewares.WechatAuth{}
+	r.Use(wechatAuth.Do())
 	r.Any("/wechat_callback/:web", func(c *gin.Context) {
 		web := c.Param("web")
 
@@ -18,7 +19,7 @@ func Routes() *gin.Engine {
 	})
 	wegou := r.Group("/wegou")
 
-	wegou.Use(middlewares.AuthWechat())
+	wegou.Use(wechatAuth.Do())
 	//素材管理
 	materialController := controller.MaterialController{}
 	wegou.GET("/material/:web", materialController.ListMaterial)

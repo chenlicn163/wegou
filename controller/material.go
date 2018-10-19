@@ -8,8 +8,8 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"wegou/config"
 	"wegou/service/server"
-	"wegou/types"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +22,7 @@ func (materialController *MaterialController) ListMaterial(c *gin.Context) {
 	result.GetMaterial(c)
 
 	var data map[string]interface{}
-	if result.Code == types.WechatSuccessCode {
+	if result.Code == config.WechatSuccessCode {
 		rslt := result.Data.(map[string]interface{})
 		page := rslt["page"].(map[string]int)
 

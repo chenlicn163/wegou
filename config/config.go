@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"wegou/types"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -35,16 +34,16 @@ func init() {
 	})
 }
 
-func GetWebConfig() types.Web {
-	conf := types.Web{
+func GetWebConfig() Web {
+	conf := Web{
 		Host: viper.GetString("listen.host"),
 		Port: viper.GetString("listen.port"),
 	}
 	return conf
 }
 
-func GetKafkaConfig() types.Kafka {
-	conf := types.Kafka{
+func GetKafkaConfig() Kafka {
+	conf := Kafka{
 		Blockers:       strings.Split(viper.GetString("kafka.broker"), ","),
 		CustomerTopics: strings.Split(viper.GetString("kafak.customer_topic"), ","),
 		MaterialTopics: strings.Split(viper.GetString("kafak.material_topic"), ","),
@@ -54,9 +53,9 @@ func GetKafkaConfig() types.Kafka {
 	return conf
 }
 
-func GetDbConfig(account string) types.Db {
+func GetDbConfig(account string) Db {
 	//log.Println(dbConfig)
-	conf := types.Db{
+	conf := Db{
 		DbHost:     viper.GetString(account + ".host"),
 		DbPort:     viper.GetString(account + ".port"),
 		DbUser:     viper.GetString(account + ".user"),
@@ -67,8 +66,8 @@ func GetDbConfig(account string) types.Db {
 	return conf
 }
 
-func GetRedisConfig() types.Redis {
-	conf := types.Redis{
+func GetRedisConfig() Redis {
+	conf := Redis{
 		Server: viper.GetString("redis.server"),
 		Auth:   viper.GetString("redis.auth"),
 		Db:     viper.GetInt("redis.db"),
@@ -77,8 +76,8 @@ func GetRedisConfig() types.Redis {
 	return conf
 }
 
-func GetToolsConfig() types.Tools {
-	conf := types.Tools{
+func GetToolsConfig() Tools {
+	conf := Tools{
 		Cache:    viper.GetString("tools.cache"),
 		Upload:   viper.GetString("tools.upload"),
 		Database: viper.GetString("tools.database"),

@@ -1,7 +1,7 @@
 package model
 
 import (
-	"wegou/types"
+	"wegou/config"
 	"wegou/utils"
 )
 
@@ -32,7 +32,7 @@ type Material struct {
 //从数据库中获取素材
 func (material *Material) GetMaterial(web string, page int, MaterialType string, sourceType string, status int) []Material {
 
-	pageSize := types.MaterialPageSize
+	pageSize := config.MaterialPageSize
 	offset := pageSize * (page - 1)
 
 	conn := utils.GetDb(web).Open()

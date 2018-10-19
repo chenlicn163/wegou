@@ -2,7 +2,6 @@ package utils
 
 import (
 	"wegou/config"
-	"wegou/types"
 	"wegou/utils/database"
 
 	"github.com/jinzhu/gorm"
@@ -15,7 +14,7 @@ type Database interface {
 func GetDb(web string) (db *database.Mysql) {
 	toolsConfig := config.GetToolsConfig()
 
-	conf := types.Db{}
+	conf := config.Db{}
 	switch web {
 	case "wegou":
 		conf = config.GetDbConfig(web)

@@ -1,7 +1,7 @@
 package model
 
 import (
-	"wegou/types"
+	"wegou/config"
 	"wegou/utils"
 )
 
@@ -28,7 +28,7 @@ type Wechat struct {
 
 //获取公众号
 func (wechat *Wechat) GetWechat(web string, page int) []Wechat {
-	pageSize := types.AccountPageSize
+	pageSize := config.AccountPageSize
 	offset := pageSize * (page - 1)
 
 	conn := utils.GetDb(web).Open()

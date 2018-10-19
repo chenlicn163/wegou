@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"wegou/types"
+	"wegou/config"
 
 	cluster "github.com/bsm/sarama-cluster"
 )
 
 type MaterialConsumer struct{}
 
-func (materialConsumer *MaterialConsumer) Consumer(kafkaConfig types.Kafka) {
+func (materialConsumer *MaterialConsumer) Consumer(kafkaConfig config.Kafka) {
 
 	// init (custom) config, set mode to ConsumerModePartitions
 	config := cluster.NewConfig()

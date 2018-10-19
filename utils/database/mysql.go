@@ -2,14 +2,14 @@ package database
 
 import (
 	"fmt"
-	"wegou/types"
+	"wegou/config"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 type Mysql struct {
-	types.Db
+	config.Db
 }
 
 func (dbMysql *Mysql) Open() *gorm.DB {
