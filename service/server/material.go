@@ -35,8 +35,6 @@ type MaterialDto struct {
 	Data    interface{}
 }
 
-//---------------------------------------------------------------------------------------------
-
 //获取素材
 func (result *MaterialDto) GetMaterial(c *gin.Context) {
 
@@ -116,7 +114,7 @@ func (result *MaterialDto) AddMaterial(c *gin.Context) {
 		return
 	}
 
-	wechat, err := GetWechatCache(web)
+	wechat, err := (&WechatCache{Web: web}).Get()
 	if err != nil {
 		result.Code = types.AccountNotExistCode
 		result.Code = types.AccountNotExistMsg

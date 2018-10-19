@@ -13,31 +13,35 @@ const (
 	db = "wegou"
 )
 
-func GetWechatByCode(web string) model.Wechat {
+type WechatCache struct {
+	Web string
+}
+
+func (wechatCache *WechatCache) GetWechatByCode() model.Wechat {
 
 	wechat := model.Wechat{}
-	wechat.Code = web
+	wechat.Code = wechatCache.Web
 	wechat.GetWechatByCode(db)
 
 	return wechat
 }
 
 //设置公众号缓存
-func SetWechatCache(web string) {
-	wechat := GetWechatByCode(web)
+func (wechatCache *WechatCache) Set() {
+	wechat := wechatCache.GetWechatByCode()
 	jsonAccount, err := json.Marshal(wechat)
 
 	if err != nil {
 		logrus.Error("json wechat error:" + err.Error())
 	} else {
-		utils.GetCache(web).Set("wechat", string(jsonAccount))
+		utils.GetCache(wechatCache.Web).Set("wechat", string(jsonAccount))
 	}
 }
 
 //获取公众号缓存
-func GetWechatCache(web string) (wechat model.Wechat, err error) {
+func (wechatCache *WechatCache) Get() (wechat model.Wechat, err error) {
 
-	jsonAccount, err := utils.GetCache(web).Get("wechat")
+	jsonAccount, err := utils.GetCache(wechatCache.Web).Get("wechat")
 
 	if err != nil {
 		return wechat, errors.New("json account error:" + err.Error())

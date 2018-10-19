@@ -73,7 +73,7 @@ func (result *FanDto) AddFan(web string, wx string) {
 		return
 	}
 
-	wechat, err := GetWechatCache(web)
+	wechat, err := (&WechatCache{Web: web}).Get()
 	if err != nil {
 		result.Code = types.AccountNotExistCode
 		result.Code = types.AccountNotExistMsg

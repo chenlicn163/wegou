@@ -53,7 +53,7 @@ func WechatServe(web string) *core.Server {
 			wx.GetMessage(ctx).Text(web, "欢迎关注")
 		})
 	}
-	wechat, _ := server.GetWechatCache(web)
+	wechat, _ := (&server.WechatCache{Web: web}).Get()
 
 	// 创建 Server, 设置正确的参数.
 	// 通常一个 Server 对应一个公众号, 当然一个 Server 也可以对应多个公众号, 这个时候 oriId 和 appId 都应该设置为空值!

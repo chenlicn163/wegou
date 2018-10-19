@@ -9,10 +9,11 @@ import (
 func AuthWechat() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		web := c.Param("web")
-		account, _ := server.GetWechatCache(web)
+		wechatCache := server.WechatCache{Web: web}
+		account, _ := wechatCache.Get()
 		//logrus.Info(account)
 		if account.Id == 0 {
-			server.SetWechatCache(web)
+			wechatCache.Set()
 		}
 
 		c.Next()
