@@ -1,15 +1,12 @@
 package utils
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
 	"wegou/config"
 	"wegou/types"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/sirupsen/logrus"
 )
 
 type Database interface {
@@ -49,17 +46,4 @@ func (dbMysql *mysql) Open() *gorm.DB {
 	conn.DB().SetMaxIdleConns(10)
 	conn.SingularTable(true)
 	return conn
-}
-
-//获取公众号缓存
-func GetWechatConfig(web string) (wechat types.Db) {
-	jsonAccount, err := GetCache(web).Get("wechat")
-	if err != nil {
-		logrus.Error(errors.New("json account error:" + err.Error()))
-		return wechat
-	}
-	if jsonAccount != "" {
-		json.Unmarshal([]byte(jsonAccount), &wechat)
-	}
-	return wechat
 }
