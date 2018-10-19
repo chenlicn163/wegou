@@ -31,7 +31,7 @@ func (fan *Fan) GetFan(web string, page int) []Fan {
 	pageSize := types.FanPageSize
 	offset := pageSize * (page - 1)
 
-	conn := utils.OpenWechat(web)
+	conn := utils.GetDb(web).Open()
 	defer conn.Close()
 	if conn == nil {
 		return nil
@@ -48,7 +48,7 @@ func (fan *Fan) GetFan(web string, page int) []Fan {
 
 func (fan *Fan) GetFanCount(web string) int {
 
-	conn := utils.OpenWechat(web)
+	conn := utils.GetDb(web).Open()
 	defer conn.Close()
 	if conn == nil {
 		return 0
@@ -63,8 +63,11 @@ func (fan *Fan) GetFanCount(web string) int {
 }
 
 func (fan *Fan) AddFan(web string) bool {
-	conn := utils.OpenWechat(web)
+	conn := utils.GetDb(web).Open()
 	defer conn.Close()
+	if conn == nil {
+		return false
+	}
 	conn.Model(&Fan{}).Create(fan)
 	return true
 }

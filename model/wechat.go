@@ -31,7 +31,7 @@ func (wechat *Wechat) GetWechat(web string, page int) []Wechat {
 	pageSize := types.AccountPageSize
 	offset := pageSize * (page - 1)
 
-	conn := utils.Open(web)
+	conn := utils.GetDb(web).Open()
 	defer conn.Close()
 	if conn == nil {
 		return nil
@@ -46,8 +46,11 @@ func (wechat *Wechat) GetWechat(web string, page int) []Wechat {
 }
 
 func (wechat *Wechat) GetWechatByCode(web string) {
-	conn := utils.Open(web)
+	conn := utils.GetDb(web).Open()
 	defer conn.Close()
+	if conn == nil {
+		return
+	}
 	conn.Model(&Wechat{}).
 		Where("code=?", wechat.Code).First(&wechat)
 
@@ -55,8 +58,11 @@ func (wechat *Wechat) GetWechatByCode(web string) {
 
 //添加公众号
 func (wechat *Wechat) AddWechat(web string) bool {
-	conn := utils.Open(web)
+	conn := utils.GetDb(web).Open()
 	defer conn.Close()
+	if conn == nil {
+		return false
+	}
 	conn.Model(&Wechat{}).Create(wechat)
 	return true
 }

@@ -182,7 +182,7 @@ func AddMaterial(c *gin.Context) types.Dto {
 		strconv.Itoa(time.Now().Year()) + "/" +
 		strconv.Itoa(int(time.Now().Month())) + "/" +
 		strconv.Itoa(time.Now().Day())
-	fileName, err := utils.Upload(c.Request, uploadPath)
+	fileName, err := utils.GetUpload(uploadPath).UploadFile(c.Request)
 	if err != nil {
 		result.Code = types.MaterialFileAddFailedCode
 		result.Message = types.MaterialFileAddFailedMsg

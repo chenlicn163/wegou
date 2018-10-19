@@ -7,12 +7,12 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
-type Redis struct {
+type CacheRedis struct {
 	Conn   redis.Conn
 	Prefix string
 }
 
-func (r *Redis) Set(key string, val string) bool {
+func (r *CacheRedis) Set(key string, val string) bool {
 	conn := r.Conn
 	defer conn.Close()
 
@@ -21,7 +21,7 @@ func (r *Redis) Set(key string, val string) bool {
 
 }
 
-func (r *Redis) Get(key string) (string, error) {
+func (r *CacheRedis) Get(key string) (string, error) {
 	conn := r.Conn
 	defer conn.Close()
 
@@ -34,7 +34,7 @@ func (r *Redis) Get(key string) (string, error) {
 	return s, nil
 }
 
-func (r *Redis) getKey(key string) string {
+func (r *CacheRedis) getKey(key string) string {
 
 	if r.Prefix == "" {
 		return key

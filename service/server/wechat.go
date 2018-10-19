@@ -30,14 +30,14 @@ func SetWechatCache(web string) {
 	if err != nil {
 		logrus.Error("json wechat error:" + err.Error())
 	} else {
-		utils.Redis(web).Set("wechat", string(jsonAccount))
+		utils.GetCache(web).Set("wechat", string(jsonAccount))
 	}
 }
 
 //获取公众号缓存
 func GetWechatCache(web string) (wechat model.Wechat, err error) {
 
-	jsonAccount, err := utils.Redis(web).Get("wechat")
+	jsonAccount, err := utils.GetCache(web).Get("wechat")
 
 	if err != nil {
 		return wechat, errors.New("json account error:" + err.Error())

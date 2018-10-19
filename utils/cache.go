@@ -8,6 +8,10 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
+var (
+	pool *redis.Pool
+)
+
 func newPool(server string, password string, db int) *redis.Pool {
 	return &redis.Pool{
 		MaxIdle:     3,
@@ -33,13 +37,15 @@ func newPool(server string, password string, db int) *redis.Pool {
 	}
 }
 
-var (
-	pool *redis.Pool
-)
+func GetCache(web string) (r cache.Cache) {
 
-func Redis(web string) (r *cache.Redis) {
-	redisConfig := config.GetRedisConfig()
-	pool = newPool(redisConfig.Server, redisConfig.Auth, redisConfig.Db)
-	r = &cache.Redis{Conn: pool.Get(), Prefix: web}
+	toolsConfig := config.GetToolsConfig()
+	switch toolsConfig.Cache {
+	case "redis":
+		redisConfig := config.GetRedisConfig()
+		pool = newPool(redisConfig.Server, redisConfig.Auth, redisConfig.Db)
+		r = &cache.CacheRedis{Conn: pool.Get(), Prefix: web}
+	}
+
 	return r
 }

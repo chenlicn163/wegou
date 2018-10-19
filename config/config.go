@@ -76,3 +76,13 @@ func GetRedisConfig() types.Redis {
 
 	return conf
 }
+
+func GetToolsConfig() types.Tools {
+	conf := types.Tools{
+		Cache:    viper.GetString("tools.cache"),
+		Upload:   viper.GetString("tools.upload"),
+		Database: viper.GetString("tools.database"),
+	}
+
+	return conf
+}
