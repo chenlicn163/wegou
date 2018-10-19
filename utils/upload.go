@@ -1,11 +1,16 @@
 package utils
 
 import (
+	"net/http"
 	"wegou/config"
 	"wegou/utils/upload"
 )
 
-func GetUpload(uploadPath string) (up upload.Upload) {
+type Upload interface {
+	UploadFile(r *http.Request) (string, error)
+}
+
+func GetUpload(uploadPath string) (up Upload) {
 	toolsConfig := config.GetToolsConfig()
 	switch toolsConfig.Upload {
 	case "file":

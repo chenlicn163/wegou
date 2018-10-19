@@ -4,7 +4,13 @@ import (
 	"wegou/config"
 	"wegou/types"
 	"wegou/utils/database"
+
+	"github.com/jinzhu/gorm"
 )
+
+type Database interface {
+	Open() *gorm.DB
+}
 
 func GetDb(web string) (dbMysql *database.Mysql) {
 	toolsConfig := config.GetToolsConfig()

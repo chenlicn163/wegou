@@ -8,6 +8,11 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
+type Cache interface {
+	Set(key string, val string) bool
+	Get(key string) (string, error)
+}
+
 var (
 	pool *redis.Pool
 )
@@ -37,7 +42,7 @@ func newPool(server string, password string, db int) *redis.Pool {
 	}
 }
 
-func GetCache(web string) (r cache.Cache) {
+func GetCache(web string) (r Cache) {
 
 	toolsConfig := config.GetToolsConfig()
 	switch toolsConfig.Cache {
