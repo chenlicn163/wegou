@@ -1,18 +1,14 @@
 package server
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 	"wegou/model"
 	"wegou/utils"
 
 	"github.com/gin-gonic/gin"
-	"gopkg.in/chanxuehong/wechat.v2/mp/material"
 
 	"wegou/types"
-
-	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 )
 
 const (
@@ -33,64 +29,22 @@ const (
 	materialTypeNews  = "news"
 )
 
-//获取永久素材数量
-func FetchMaterialCount(clt *core.Client) *material.MaterialCountInfo {
-
-	info, err := material.GetMaterialCount(clt)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(info)
-
-	return info
-}
-
-//批量获取永久素材
-func BatchFetchMaterial(clt *core.Client, materialType string, pageStr string) *material.BatchGetResult {
-	size := types.MaterialPageSize
-	page, err := strconv.Atoi(pageStr)
-	if err != nil {
-		page = 1
-	}
-	offset := (page - 1) * size
-	rslt, err := material.BatchGet(clt, materialType, offset, size)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(rslt)
-
-	return rslt
-}
-
-//永久素材，同步微信服务器数据
-func SyncMaterial() {
-	//1 获取总数
-	//2 分页获取,入库
-}
-
-//永久素材，上传到微信服务器
-func SyncAddMaterial() {
-
-}
-
-//永久素材，从微信服务器上删除
-func SyncDelMaterial() {
-
+type MaterialDto struct {
+	Code    string
+	Message string
+	Data    interface{}
 }
 
 //---------------------------------------------------------------------------------------------
 
 //获取素材
-func GetMaterial(c *gin.Context) types.Dto {
-
-	result := types.Dto{}
+func (result *MaterialDto) GetMaterial(c *gin.Context) {
 
 	web := c.Param("web")
 	if web == "" {
 		result.Code = types.AccountParamErrorCode
 		result.Message = types.AccountParamErrorMsg
-		return result
+		return
 	}
 
 	pageStr := c.Query("page")
@@ -104,7 +58,7 @@ func GetMaterial(c *gin.Context) types.Dto {
 	if exists, _ := utils.InArray(MaterialType, MaterialTypeValues); MaterialType != "" && !exists {
 		result.Code = types.MaterialTypeErrorCode
 		result.Message = types.MaterialTypeErrorMsg
-		return result
+		return
 	}
 
 	statusStr := c.Query("status")
@@ -112,7 +66,7 @@ func GetMaterial(c *gin.Context) types.Dto {
 	if exists, _ := utils.InArray(statusStr, statusValues); statusStr != "" && !exists {
 		result.Code = types.SourceStatusErrorCode
 		result.Message = types.SourceStatusErrorMsg
-		return result
+		return
 	}
 	status, err := strconv.Atoi(statusStr)
 	if err != nil {
@@ -125,7 +79,7 @@ func GetMaterial(c *gin.Context) types.Dto {
 	if exists, _ := utils.InArray(sourceType, sourceTypeValues); sourceType != "" && !exists {
 		result.Code = types.SourceTypeErrorCode
 		result.Message = types.SourceTypeErrorMsg
-		return result
+		return
 	}
 
 	mat := model.Material{}
@@ -149,33 +103,31 @@ func GetMaterial(c *gin.Context) types.Dto {
 			"page_num":   pageNum,
 		},
 	}
-	return result
+	return
 }
 
 //添加素材
-func AddMaterial(c *gin.Context) types.Dto {
-
-	result := types.Dto{}
+func (result *MaterialDto) AddMaterial(c *gin.Context) {
 
 	web := c.Param("web")
 	if web == "" {
 		result.Code = types.AccountParamErrorCode
 		result.Message = types.AccountParamErrorMsg
-		return result
+		return
 	}
 
 	wechat, err := GetWechatCache(web)
 	if err != nil {
 		result.Code = types.AccountNotExistCode
 		result.Code = types.AccountNotExistMsg
-		return result
+		return
 	}
 
 	title := c.PostForm("title")
 	if title == "" {
 		result.Code = types.MaterialTitleAddFailedCode
 		result.Message = types.MaterialTitleAddFailedMsg
-		return result
+		return
 	}
 
 	uploadPath := "upload/" + web + "/" +
@@ -186,7 +138,7 @@ func AddMaterial(c *gin.Context) types.Dto {
 	if err != nil {
 		result.Code = types.MaterialFileAddFailedCode
 		result.Message = types.MaterialFileAddFailedMsg
-		return result
+		return
 	}
 
 	showCoverPic, err := strconv.Atoi(c.PostForm("show_cover_pic"))
@@ -205,7 +157,7 @@ func AddMaterial(c *gin.Context) types.Dto {
 	if exists, _ := utils.InArray(sourceType, sourceTypeValues); sourceType != "" && !exists {
 		result.Code = types.MaterialSourceTypeAddFailedCode
 		result.Message = types.MaterialSourceTypeAddFailedMsg
-		return result
+		return
 	}
 
 	author := c.PostForm("author")
@@ -231,18 +183,17 @@ func AddMaterial(c *gin.Context) types.Dto {
 	mat.AddMaterial(web)
 	result.Code = types.WechatSuccessCode
 	result.Message = types.WechatSuccessMsg
-	return result
+	return
 }
 
 //删除素材
-func DelMaterial(c *gin.Context) types.Dto {
-	result := types.Dto{}
+func (result *MaterialDto) DelMaterial(c *gin.Context) {
 
 	web := c.Param("web")
 	if web == "" {
 		result.Code = types.AccountParamErrorCode
 		result.Message = types.AccountParamErrorMsg
-		return result
+		return
 	}
 
 	idStr := c.Param("id")
@@ -250,7 +201,7 @@ func DelMaterial(c *gin.Context) types.Dto {
 	if err != nil {
 		result.Code = types.MaterialIdDeleteFailedCode
 		result.Message = types.MaterialIdDeleteFailedMsg
-		return result
+		return
 	}
 	mat := model.Material{}
 	mat.Id = id
@@ -261,5 +212,5 @@ func DelMaterial(c *gin.Context) types.Dto {
 	//触发任务，删除微信服务器
 	result.Code = types.WechatSuccessCode
 	result.Message = types.WechatSuccessMsg
-	return result
+	return
 }

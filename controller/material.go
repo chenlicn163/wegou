@@ -16,8 +16,8 @@ import (
 
 //查询永久素材
 func ListMaterialServe(c *gin.Context) {
-
-	result := server.GetMaterial(c)
+	result := server.MaterialDto{}
+	result.GetMaterial(c)
 
 	var data map[string]interface{}
 	if result.Code == types.WechatSuccessCode {
@@ -63,8 +63,8 @@ func ListMaterialServe(c *gin.Context) {
 
 //删除永久素材
 func DeleteMaterialServe(c *gin.Context) {
-
-	result := server.DelMaterial(c)
+	result := server.MaterialDto{}
+	result.DelMaterial(c)
 
 	c.JSON(http.StatusOK, gin.H{
 		"code":    result.Code,
@@ -74,8 +74,8 @@ func DeleteMaterialServe(c *gin.Context) {
 
 //添加永久素材
 func AddMaterialServe(c *gin.Context) {
-
-	result := server.AddMaterial(c)
+	result := server.MaterialDto{}
+	result.AddMaterial(c)
 
 	c.JSON(http.StatusOK, gin.H{
 		"code":    result.Code,

@@ -10,7 +10,8 @@ import (
 
 //查询粉丝
 func ListFansServe(c *gin.Context) {
-	result := server.GetFan(c)
+	result := server.FanDto{}
+	result.GetFan(c)
 	var data map[string]interface{}
 	if result.Code == types.WechatSuccessCode {
 		rslt := result.Data.(map[string]interface{})

@@ -15,14 +15,20 @@ const (
 	unCompletedStatus = 2 //未完善的
 )
 
+type FanDto struct {
+	Code    string
+	Message string
+	Data    interface{}
+}
+
 //粉丝列表
-func GetFan(c *gin.Context) types.Dto {
-	result := types.Dto{}
+func (result *FanDto) GetFan(c *gin.Context) {
+
 	web := c.Param("web")
 	if web == "" {
 		result.Code = types.AccountParamErrorCode
 		result.Message = types.AccountParamErrorMsg
-		return result
+		return
 	}
 
 	pageStr := c.Query("page")
@@ -55,24 +61,23 @@ func GetFan(c *gin.Context) types.Dto {
 			"page_num":   pageNum,
 		},
 	}
-	return result
+	return
 }
 
 //添加粉丝
-func AddFan(web string, wx string) types.Dto {
-	result := types.Dto{}
+func (result *FanDto) AddFan(web string, wx string) {
 
 	if web == "" {
 		result.Code = types.AccountParamErrorCode
 		result.Code = types.AccountParamErrorMsg
-		return result
+		return
 	}
 
 	wechat, err := GetWechatCache(web)
 	if err != nil {
 		result.Code = types.AccountNotExistCode
 		result.Code = types.AccountNotExistMsg
-		return result
+		return
 	}
 
 	createdAt := time.Now().Unix()
@@ -103,5 +108,5 @@ func AddFan(web string, wx string) types.Dto {
 	result.Code = types.WechatSuccessCode
 	result.Message = types.WechatSuccessMsg
 	result.Data = fan
-	return result
+	return
 }

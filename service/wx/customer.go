@@ -7,13 +7,13 @@ import (
 	"gopkg.in/chanxuehong/wechat.v2/mp/user"
 )
 
-type Customer struct {
+type WgUser struct {
 	Clt    *core.Client
 	OpenId string
 }
 
-func (customer *Customer) Get() (fan model.Fan) {
-	info, err := user.Get(customer.Clt, customer.OpenId, user.LanguageZhCN)
+func (wgUser *WgUser) Get() (fan model.Fan) {
+	info, err := user.Get(wgUser.Clt, wgUser.OpenId, user.LanguageZhCN)
 	if err != nil {
 		return fan
 	}

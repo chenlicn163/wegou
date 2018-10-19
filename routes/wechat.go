@@ -48,7 +48,8 @@ func WechatServe(web string) *core.Server {
 		})
 		mux.EventHandleFunc(request.EventTypeSubscribe, func(ctx *core.Context) { // 设置具体类型的事件处理 Handler
 			// TODO: 事件处理逻辑
-			server.AddFan(web, ctx.MixedMsg.MsgHeader.FromUserName)
+			dto := server.FanDto{}
+			dto.AddFan(web, ctx.MixedMsg.MsgHeader.FromUserName)
 			wx.GetMessage(ctx).Text(web, "欢迎关注")
 		})
 	}

@@ -5,31 +5,31 @@ import (
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/response"
 )
 
-type Message struct {
+type WgMessage struct {
 	Ctx *core.Context
 }
 
 //发送消息
-func (msg *Message) sendMsg(content interface{}) {
-	aesKey := string(msg.Ctx.AESKey)
+func (wgMessage *WgMessage) sendMsg(content interface{}) {
+	aesKey := string(wgMessage.Ctx.AESKey)
 	if aesKey != "" {
-		msg.Ctx.AESResponse(msg, 0, "", nil)
+		wgMessage.Ctx.AESResponse(content, 0, "", nil)
 	} else {
-		msg.Ctx.RawResponse(msg)
+		wgMessage.Ctx.RawResponse(content)
 	}
 }
 
 //文本消息
-func (msg Message) Text(web string, content string) {
-	text := response.NewText(msg.Ctx.MixedMsg.MsgHeader.FromUserName, msg.Ctx.MixedMsg.MsgHeader.ToUserName,
-		msg.Ctx.MixedMsg.MsgHeader.CreateTime, content)
-	msg.sendMsg(text)
+func (wgMessage *WgMessage) Text(web string, content string) {
+	text := response.NewText(wgMessage.Ctx.MixedMsg.MsgHeader.FromUserName, wgMessage.Ctx.MixedMsg.MsgHeader.ToUserName,
+		wgMessage.Ctx.MixedMsg.MsgHeader.CreateTime, content)
+	wgMessage.sendMsg(text)
 }
 
 //图片消息
-func (msg *Message) Image(web string, mediaId string) {
-	image := response.NewImage(msg.Ctx.MixedMsg.MsgHeader.FromUserName, msg.Ctx.MixedMsg.MsgHeader.ToUserName,
-		msg.Ctx.MixedMsg.MsgHeader.CreateTime, mediaId)
+func (wgMessage *WgMessage) Image(web string, mediaId string) {
+	image := response.NewImage(wgMessage.Ctx.MixedMsg.MsgHeader.FromUserName, wgMessage.Ctx.MixedMsg.MsgHeader.ToUserName,
+		wgMessage.Ctx.MixedMsg.MsgHeader.CreateTime, mediaId)
 	image.Image.MediaId = mediaId
-	msg.sendMsg(image)
+	wgMessage.sendMsg(image)
 }
