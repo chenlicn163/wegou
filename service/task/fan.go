@@ -12,10 +12,10 @@ import (
 	"github.com/bsm/sarama-cluster"
 )
 
-type CustomerConCumer struct{}
+type FanConCumer struct{}
 
 //粉丝任务消费者
-func (customerConCumer *CustomerConCumer) Consumer(kafkaConfig config.Kafka) {
+func (fanConCumer *FanConCumer) Consumer(kafkaConfig config.Kafka) {
 
 	// init (custom) config, set mode to ConsumerModePartitions
 	config := cluster.NewConfig()
@@ -47,7 +47,7 @@ func (customerConCumer *CustomerConCumer) Consumer(kafkaConfig config.Kafka) {
 				for msg := range pc.Messages() {
 					/*fmt.Fprintf(os.Stdout, "%s/%d/%d\t%s\t%s\n", msg.Topic, msg.Partition, msg.Offset, msg.Key, msg.Value)
 					 */
-					customerConCumer.customer(msg)
+					fanConCumer.customer(msg)
 					consumer.MarkOffset(msg, "") // mark message as processed
 				}
 			}(part)
@@ -57,18 +57,18 @@ func (customerConCumer *CustomerConCumer) Consumer(kafkaConfig config.Kafka) {
 	}
 }
 
-func (customerConCumer *CustomerConCumer) customer(msg *sarama.ConsumerMessage) {
+func (fanConCumer *FanConCumer) customer(msg *sarama.ConsumerMessage) {
 	message := string(msg.Value)
 	topic := gjson.Get(message, "kafka.topic").String()
 	switch topic {
 	case "customer-add":
-		customerConCumer.customerAdd(message)
+		fanConCumer.customerAdd(message)
 	}
 }
 
-func (customerConCumer *CustomerConCumer) customerAdd(message string) {
+func (fanConCumer *FanConCumer) customerAdd(message string) {
 	web := gjson.Get(message, "web").String()
 	openid := gjson.Get(message, "openid").String()
-	fan := wx.GetCustomer(web, openid).Get()
+	fan := wx.GetFan(web, openid).Get()
 	fan.AddFan(web)
 }

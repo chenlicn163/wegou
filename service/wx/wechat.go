@@ -12,7 +12,7 @@ func GetMessage(ctx *core.Context) *WgMessage {
 }
 
 //获取微信粉丝
-func GetCustomer(web string, openId string) *WgUser {
+func GetFan(web string, openId string) *WgUser {
 	wechatConfig := utils.GetWechatConfig(web)
 	srv := core.NewDefaultAccessTokenServer(wechatConfig.Appid, wechatConfig.Appsecret, nil)
 	clt := core.NewClient(srv, nil)
