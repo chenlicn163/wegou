@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"time"
 	"wegou/model"
-	"wegou/task"
+	"wegou/service/task"
 	"wegou/types"
 
 	"github.com/gin-gonic/gin"

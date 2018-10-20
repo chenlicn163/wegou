@@ -3,7 +3,7 @@ package main
 import (
 	"wegou/config"
 	"wegou/routes"
-	"wegou/task"
+	"wegou/service/task"
 )
 
 func init() {

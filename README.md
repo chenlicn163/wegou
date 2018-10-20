@@ -15,8 +15,8 @@
 ├── service         服务层
 │   ├── middlewares 中间件
 │   ├── server      逻辑层
-│   └── wx          微信逻辑处理
-├── task            任务
+│   ├── wx          微信逻辑处理
+│   └── task            任务
 ├── types           常量
 ├── upload          上传文件目录
 ├── utils           工具
