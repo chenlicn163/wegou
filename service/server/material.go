@@ -28,6 +28,7 @@ const (
 	materialTypeNews  = "news"
 )
 
+//素材Dto
 type MaterialDto struct {
 	Code    string
 	Message string

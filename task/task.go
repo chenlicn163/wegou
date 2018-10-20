@@ -12,6 +12,7 @@ import (
 
 type Task struct{ Topics string }
 
+//异步提交任务
 func (task *Task) AsyncProducer(value string) {
 	kafkaConfig := config.GetKafkaConfig()
 	config := sarama.NewConfig()

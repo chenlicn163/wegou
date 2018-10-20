@@ -9,6 +9,7 @@ import (
 	"gopkg.in/chanxuehong/wechat.v2/mp/material"
 )
 
+//微信公众号永久素材
 type WgMaterial struct {
 	Clt *core.Client
 }

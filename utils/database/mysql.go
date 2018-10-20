@@ -8,10 +8,12 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
+//数据库
 type Mysql struct {
 	config.Db
 }
 
+//打开数据库
 func (dbMysql *Mysql) Open() *gorm.DB {
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True",

@@ -5,6 +5,7 @@ import (
 	"wegou/utils"
 )
 
+//粉丝实体
 type Fan struct {
 	Id             int    `json:"id"`
 	Wx             string `json:"wx"`
@@ -27,6 +28,7 @@ type Fan struct {
 	SubscribeScene string `json:"subscribe_scene"`
 }
 
+//获取粉丝
 func (fan *Fan) GetFan(web string, page int) []Fan {
 	pageSize := types.FanPageSize
 	offset := pageSize * (page - 1)
@@ -46,6 +48,7 @@ func (fan *Fan) GetFan(web string, page int) []Fan {
 	return fans
 }
 
+//粉丝总数量
 func (fan *Fan) GetFanCount(web string) int {
 
 	conn := utils.GetDb(web).Open()
@@ -62,6 +65,7 @@ func (fan *Fan) GetFanCount(web string) int {
 	return count
 }
 
+//添加粉丝
 func (fan *Fan) AddFan(web string) bool {
 	conn := utils.GetDb(web).Open()
 	defer conn.Close()

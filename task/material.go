@@ -11,6 +11,7 @@ import (
 
 type MaterialConsumer struct{}
 
+//素材任务消费者
 func (materialConsumer *MaterialConsumer) Consumer(kafkaConfig config.Kafka) {
 
 	// init (custom) config, set mode to ConsumerModePartitions

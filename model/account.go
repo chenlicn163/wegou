@@ -1,5 +1,6 @@
 package model
 
+//用户实体
 type Account struct {
 	Id          int      `json:"id"`
 	Name        string   `json:"name"`

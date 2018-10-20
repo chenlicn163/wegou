@@ -5,6 +5,7 @@ import (
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/response"
 )
 
+//微信公众号消息回复
 type WgMessage struct {
 	Ctx *core.Context
 }

@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+//配置初始化
 func init() {
 	appPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
@@ -34,6 +35,7 @@ func init() {
 	})
 }
 
+//读取监听IP和监听端口
 func GetWebConfig() Web {
 	conf := Web{
 		Host: viper.GetString("listen.host"),
@@ -42,6 +44,7 @@ func GetWebConfig() Web {
 	return conf
 }
 
+//读取kafka配置
 func GetKafkaConfig() Kafka {
 	conf := Kafka{
 		Blockers:       strings.Split(viper.GetString("kafka.broker"), ","),
@@ -53,6 +56,7 @@ func GetKafkaConfig() Kafka {
 	return conf
 }
 
+//读取主数据库配置
 func GetDbConfig(account string) Db {
 	//log.Println(dbConfig)
 	conf := Db{
@@ -66,6 +70,7 @@ func GetDbConfig(account string) Db {
 	return conf
 }
 
+//读取redis配置
 func GetRedisConfig() Redis {
 	conf := Redis{
 		Server: viper.GetString("redis.server"),
@@ -76,6 +81,7 @@ func GetRedisConfig() Redis {
 	return conf
 }
 
+//读取缓存、上传、数据库使用类型配置
 func GetToolsConfig() Tools {
 	conf := Tools{
 		Cache:    viper.GetString("tools.cache"),

@@ -9,6 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+//in_array方法
 func InArray(need interface{}, needArr interface{}) (exists bool, index int) {
 	exists = false
 	index = -1

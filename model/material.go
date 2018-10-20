@@ -5,7 +5,7 @@ import (
 	"wegou/utils"
 )
 
-//素材
+//素材实体
 type Material struct {
 	Id               int    `json:"id"`
 	Pid              int    `json:"pid"`
@@ -29,7 +29,7 @@ type Material struct {
 	WxUpdatedAt      int64  `json:"wx_upadated_at"`
 }
 
-//从数据库中获取素材
+//获取素材
 func (material *Material) GetMaterial(web string, page int, MaterialType string, sourceType string, status int) []Material {
 
 	pageSize := types.MaterialPageSize
@@ -70,6 +70,7 @@ func (material *Material) GetMaterial(web string, page int, MaterialType string,
 	return materials
 }
 
+//素材数量
 func (material *Material) GetMaterialCount(web string, MaterialType string, sourceType string, status int) int {
 
 	conn := utils.GetDb(web).Open()

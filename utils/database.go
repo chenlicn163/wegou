@@ -11,6 +11,7 @@ type Database interface {
 	Open() *gorm.DB
 }
 
+//获取数据库
 func GetDb(web string) (db *database.Mysql) {
 	toolsConfig := config.GetToolsConfig()
 

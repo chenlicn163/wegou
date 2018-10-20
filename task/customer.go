@@ -14,6 +14,7 @@ import (
 
 type CustomerConCumer struct{}
 
+//粉丝任务消费者
 func (customerConCumer *CustomerConCumer) Consumer(kafkaConfig config.Kafka) {
 
 	// init (custom) config, set mode to ConsumerModePartitions

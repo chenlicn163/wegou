@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//路由
 func Routes() *gin.Engine {
 	r := gin.Default()
 	wechatAuth := middlewares.WechatAuth{}

@@ -5,6 +5,7 @@ import (
 	"wegou/utils"
 )
 
+//公众号实体
 type Wechat struct {
 	Id          int    `json:"id"`
 	Name        string `json:"name"`
@@ -45,6 +46,7 @@ func (wechat *Wechat) GetWechat(web string, page int) []Wechat {
 	return wechats
 }
 
+//根据公众号code获取公众号信息
 func (wechat *Wechat) GetWechatByCode(web string) {
 	conn := utils.GetDb(web).Open()
 	defer conn.Close()

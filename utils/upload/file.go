@@ -12,11 +12,12 @@ import (
 	"path"
 )
 
+//上传
 type FileUpload struct {
 	UploadPath string
 }
 
-//上传图片
+//上传
 func (up *FileUpload) UploadFile(r *http.Request) (string, error) {
 	uploadPath := up.UploadPath
 	//判断目录是否存在

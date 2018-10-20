@@ -8,6 +8,7 @@ import (
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/request"
 )
 
+//微信被动回复处理路由
 func WechatServe(web string) *core.Server {
 
 	mux := core.NewServeMux() // 创建 core.Handler, 也可以用自己实现的 core.Handler

@@ -13,6 +13,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+//设置日志存放路径
 func InitLog() {
 	logPath := viper.GetString("log_path")
 	if _, err := os.Stat(logPath); os.IsNotExist(err) {
@@ -22,6 +23,7 @@ func InitLog() {
 	ConfigLocalFilesystemLogger(logPath, filename, 10*86400*time.Second, 86400*time.Second)
 }
 
+//设置日志文件属性信息
 func ConfigLocalFilesystemLogger(logPath string, logFileName string, maxAge time.Duration, rotationTime time.Duration) {
 	baseLogPath := path.Join(logPath, logFileName)
 	writer, err := rotatelogs.New(

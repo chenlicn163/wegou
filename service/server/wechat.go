@@ -13,10 +13,12 @@ const (
 	db = "wegou"
 )
 
+//公众号缓存
 type WechatCache struct {
 	Web string
 }
 
+//根据公众号code获取公众号
 func (wechatCache *WechatCache) GetWechatByCode() model.Wechat {
 
 	wechat := model.Wechat{}

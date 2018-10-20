@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//粉丝控制器
 type FanController struct{}
 
 //查询粉丝

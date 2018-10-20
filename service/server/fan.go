@@ -15,6 +15,7 @@ const (
 	unCompletedStatus = 2 //未完善的
 )
 
+//粉丝Dto
 type FanDto struct {
 	Code    string
 	Message string

@@ -50,6 +50,7 @@ type Redis struct {
 	Db     int
 }
 
+//缓存、上传、数据库类型配置
 type Tools struct {
 	Cache    string
 	Upload   string

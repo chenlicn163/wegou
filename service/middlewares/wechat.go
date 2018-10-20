@@ -9,6 +9,7 @@ import (
 type WechatAuth struct {
 }
 
+//公众号中间件，获取公众号信息存入缓存
 func (wechatAuth *WechatAuth) Do() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		web := c.Param("web")

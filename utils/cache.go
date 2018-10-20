@@ -8,6 +8,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
+//缓存
 type Cache interface {
 	Set(key string, val string) bool
 	Get(key string) (string, error)
@@ -42,6 +43,7 @@ func newPool(server string, password string, db int) *redis.Pool {
 	}
 }
 
+//获取缓存
 func GetCache(web string) (r Cache) {
 
 	toolsConfig := config.GetToolsConfig()

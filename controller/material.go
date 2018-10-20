@@ -14,6 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//永久素材控制器
 type MaterialController struct{}
 
 //查询永久素材

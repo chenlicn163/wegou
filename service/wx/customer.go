@@ -7,11 +7,13 @@ import (
 	"gopkg.in/chanxuehong/wechat.v2/mp/user"
 )
 
+//微信公众号粉丝
 type WgUser struct {
 	Clt    *core.Client
 	OpenId string
 }
 
+//获取用户信息
 func (wgUser *WgUser) Get() (fan model.Fan) {
 	info, err := user.Get(wgUser.Clt, wgUser.OpenId, user.LanguageZhCN)
 	if err != nil {
