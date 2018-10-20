@@ -10,13 +10,13 @@
 ├── controller      控制器
 ├── logs            日志文件
 ├── main.go         主文件
-├── model           模型文件
-├── routes          路由文件
+├── model           模型层
+├── routes          路由
 ├── service         服务层
 │   ├── middlewares 中间件
-│   ├── server      逻辑层
-│   ├── wx          微信逻辑处理
-│   └── task            任务
+│   ├── server      逻辑
+│   ├── wx          微信逻辑
+│   └── task        任务
 ├── types           常量
 ├── upload          上传文件目录
 ├── utils           工具
