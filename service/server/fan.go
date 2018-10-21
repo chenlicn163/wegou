@@ -1,6 +1,7 @@
 package server
 
 import (
+	"azoya/nova/json"
 	"strconv"
 	"time"
 	"wegou/model"
@@ -104,7 +105,20 @@ func (result *FanDto) AddFan(web string, wx string) {
 	}
 	fan.AddFan(web)
 
-	(&task.Task{Topics: ""}).AsyncProducer("")
+	kafka := map[string]interface{}{
+		"kafka":      map[string]string{"topic": "customer-add"},
+		"open_id":    wx,
+		"account_id": wechat.Id,
+	}
+	kafkaBytes, err := json.Marshal(kafka)
+	if err != nil {
+		result.Code = types.FanAddKafkaFailedCode
+		result.Message = types.FanAddKafkaFailedMsg
+		result.Data = fan
+		return
+	} else {
+		(&task.Task{Topics: "customer-add"}).AsyncProducer(string(kafkaBytes))
+	}
 
 	result.Code = types.WechatSuccessCode
 	result.Message = types.WechatSuccessMsg
