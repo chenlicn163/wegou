@@ -26,10 +26,6 @@ func (result *MaterialDto) Material(msg string) {
 func (result *MaterialDto) AddMaterial(msg string) {
 	web := gjson.Get(msg, "account").String()
 	materialId := gjson.Get(msg, "material_id").String()
-	result.syncMaterial(web, materialId)
-}
-
-func (result *MaterialDto) syncMaterial(web string, materialId string) {
 	wechatCache := WechatCache{Web: web}
 	wechat, _ := wechatCache.Get()
 
@@ -44,5 +40,4 @@ func (result *MaterialDto) syncMaterial(web string, materialId string) {
 
 	/*srv := core.NewDefaultAccessTokenServer(wechat.Appid, wechat.Appsecret, nil)
 	clt := core.NewClient(srv, nil)*/
-
 }
