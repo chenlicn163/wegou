@@ -13,6 +13,7 @@
 ├── model           模型层
 ├── routes          路由
 ├── service         服务层
+│   ├── consumer    消息订阅
 │   ├── middlewares 中间件
 │   ├── server      逻辑
 │   ├── wx          微信逻辑
