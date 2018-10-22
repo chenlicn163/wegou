@@ -3,7 +3,7 @@ package main
 import (
 	"wegou/config"
 	"wegou/routes"
-	"wegou/service/task"
+	"wegou/service/consumer"
 )
 
 func init() {
@@ -15,8 +15,8 @@ func main() {
 	//启动服务
 	kafkaConfig := config.GetKafkaConfig()
 
-	go (&task.FanConCumer{}).Consumer(kafkaConfig)
-	go (&task.MaterialConsumer{}).Consumer(kafkaConfig)
+	go (&consumer.FanConCumer{}).Consumer(kafkaConfig)
+	go (&consumer.MaterialConsumer{}).Consumer(kafkaConfig)
 
 	r := routes.Routes()
 	webConfig := config.GetWebConfig()

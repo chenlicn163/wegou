@@ -139,3 +139,13 @@ func (material *Material) DelMaterial(web string) bool {
 	conn.Model(&Material{}).Where("id=?", material.Id).Delete(Material{})
 	return true
 }
+
+func (material *Material) GetMaterialById(web string) {
+	conn := utils.GetDb(web).Open()
+	defer conn.Close()
+	if conn == nil {
+		return
+	}
+	conn.Model(&Wechat{}).
+		Where("id=?", material.Id).First(&material)
+}

@@ -1,54 +1,48 @@
 package task
 
 import (
-	"fmt"
-	"os"
-	"os/signal"
-	"wegou/config"
+	"strconv"
+	"wegou/model"
 
-	cluster "github.com/bsm/sarama-cluster"
+	"github.com/sirupsen/logrus"
+	"github.com/tidwall/gjson"
 )
 
-type MaterialConsumer struct{}
+type MaterialDto struct {
+	Code    string
+	Message string
+	Data    interface{}
+}
 
-//素材任务消费者
-func (materialConsumer *MaterialConsumer) Consumer(kafkaConfig config.Kafka) {
+func (result *MaterialDto) Material(msg string) {
+	topic := gjson.Get(msg, "kafka.topic").String()
+	switch topic {
+	case "material-add":
+		result.AddMaterial(msg)
+	}
 
-	// init (custom) config, set mode to ConsumerModePartitions
-	config := cluster.NewConfig()
-	config.Group.Mode = cluster.ConsumerModePartitions
+}
 
-	// init consumer
-	brokers := kafkaConfig.Blockers
-	topics := kafkaConfig.MaterialTopics
-	consumer, err := cluster.NewConsumer(brokers, kafkaConfig.MaterialGroup, topics, config)
+func (result *MaterialDto) AddMaterial(msg string) {
+	web := gjson.Get(msg, "account").String()
+	materialId := gjson.Get(msg, "material_id").String()
+	result.syncMaterial(web, materialId)
+}
+
+func (result *MaterialDto) syncMaterial(web string, materialId string) {
+	wechatCache := WechatCache{Web: web}
+	wechat, _ := wechatCache.Get()
+
+	logrus.Info(wechat)
+	id, err := strconv.Atoi(materialId)
 	if err != nil {
-		panic(err)
+
 	}
-	defer consumer.Close()
+	material := model.Material{Id: id}
+	material.GetMaterialById(web)
+	logrus.Info(material)
 
-	// trap SIGINT to trigger a shutdown.
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, os.Interrupt)
-
-	// consume partitions
-	for {
-		select {
-		case part, ok := <-consumer.Partitions():
-			if !ok {
-				return
-			}
-
-			// start a separate goroutine to consume messages
-			go func(pc cluster.PartitionConsumer) {
-				for msg := range pc.Messages() {
-					fmt.Fprintf(os.Stdout, "%s/%d/%d\t%s\t%s\n", msg.Topic, msg.Partition, msg.Offset, msg.Key, msg.Value)
-					consumer.MarkOffset(msg, "") // mark message as processed
-				}
-			}(part)
-		case <-signals:
-			return
-		}
-	}
+	/*srv := core.NewDefaultAccessTokenServer(wechat.Appid, wechat.Appsecret, nil)
+	clt := core.NewClient(srv, nil)*/
 
 }

@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 	"wegou/model"
-	"wegou/service/task"
+	"wegou/service/consumer"
 	"wegou/types"
 
 	"github.com/gin-gonic/gin"
@@ -114,14 +114,13 @@ func (result *FanDto) AddFan(web string, wx string) {
 	if err != nil {
 		result.Code = types.FanAddKafkaFailedCode
 		result.Message = types.FanAddKafkaFailedMsg
-		result.Data = fan
+
 		return
 	} else {
-		(&task.Task{Topics: "customer-add"}).AsyncProducer(string(kafkaBytes))
+		(&consumer.Task{Topics: "customer-add"}).AsyncProducer(string(kafkaBytes))
 	}
 
 	result.Code = types.WechatSuccessCode
 	result.Message = types.WechatSuccessMsg
-	result.Data = fan
 	return
 }

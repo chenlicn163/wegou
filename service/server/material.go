@@ -1,9 +1,11 @@
 package server
 
 import (
+	"encoding/json"
 	"strconv"
 	"time"
 	"wegou/model"
+	"wegou/service/consumer"
 	"wegou/types"
 	"wegou/utils"
 
@@ -26,6 +28,8 @@ const (
 	materialTypeVideo = "video"
 	materialTypeThumb = "thumb"
 	materialTypeNews  = "news"
+
+	materialAddTopic = "material-add"
 )
 
 //素材Dto
@@ -179,6 +183,21 @@ func (result *MaterialDto) AddMaterial(c *gin.Context) {
 	}
 
 	mat.AddMaterial(web)
+
+	kafka := map[string]interface{}{
+		"kafka":       map[string]string{"topic": materialAddTopic},
+		"material_id": mat.Id,
+		"account":     wechat.Code,
+	}
+	kafkaBytes, err := json.Marshal(kafka)
+	if err != nil {
+		result.Code = types.MaterialAddKafkaFailedCode
+		result.Message = types.MaterialAddKafkaFailedMsg
+		return
+	} else {
+		(&consumer.Task{Topics: materialAddTopic}).AsyncProducer(string(kafkaBytes))
+	}
+
 	result.Code = types.WechatSuccessCode
 	result.Message = types.WechatSuccessMsg
 	return

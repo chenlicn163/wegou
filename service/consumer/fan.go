@@ -1,4 +1,4 @@
-package task
+package consumer
 
 import (
 	"os"
