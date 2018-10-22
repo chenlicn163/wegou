@@ -4,11 +4,7 @@ import (
 	"os"
 	"os/signal"
 	"wegou/config"
-	"wegou/service/wx"
 
-	"github.com/tidwall/gjson"
-
-	"github.com/Shopify/sarama"
 	"github.com/bsm/sarama-cluster"
 )
 
@@ -45,9 +41,8 @@ func (fanConCumer *FanConCumer) Consumer(kafkaConfig config.Kafka) {
 			// start a separate goroutine to consume messages
 			go func(pc cluster.PartitionConsumer) {
 				for msg := range pc.Messages() {
-					/*fmt.Fprintf(os.Stdout, "%s/%d/%d\t%s\t%s\n", msg.Topic, msg.Partition, msg.Offset, msg.Key, msg.Value)
-					 */
-					fanConCumer.customer(msg)
+					//fmt.Fprintf(os.Stdout, "%s/%d/%d\t%s\t%s\n", msg.Topic, msg.Partition, msg.Offset, msg.Key, msg.Value)
+					//fanConCumer.customer(msg)
 					consumer.MarkOffset(msg, "") // mark message as processed
 				}
 			}(part)
@@ -55,20 +50,4 @@ func (fanConCumer *FanConCumer) Consumer(kafkaConfig config.Kafka) {
 			return
 		}
 	}
-}
-
-func (fanConCumer *FanConCumer) customer(msg *sarama.ConsumerMessage) {
-	message := string(msg.Value)
-	topic := gjson.Get(message, "kafka.topic").String()
-	switch topic {
-	case "customer-add":
-		fanConCumer.customerAdd(message)
-	}
-}
-
-func (fanConCumer *FanConCumer) customerAdd(message string) {
-	web := gjson.Get(message, "web").String()
-	openid := gjson.Get(message, "openid").String()
-	fan := wx.GetFan(web, openid).Get()
-	fan.AddFan(web)
 }
