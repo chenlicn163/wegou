@@ -187,7 +187,7 @@ func (result *MaterialDto) AddMaterial(c *gin.Context) {
 	kafka := map[string]interface{}{
 		"kafka":       map[string]string{"topic": materialAddTopic},
 		"material_id": mat.Id,
-		"account":     wechat.Code,
+		"web":         wechat.Code,
 	}
 	kafkaBytes, err := json.Marshal(kafka)
 	if err != nil {

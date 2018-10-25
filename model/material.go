@@ -125,7 +125,7 @@ func (material *Material) UpdateMaterial(web string) bool {
 	if conn == nil {
 		return false
 	}
-	conn.Model(&Material{}).Where("id=?", material.Id).Updates(material)
+	conn.Model(&Material{}).UpdateColumns(material)
 	return true
 }
 
